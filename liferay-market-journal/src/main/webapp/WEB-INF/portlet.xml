@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0">
+	<portlet>
+		<portlet-name>productSender</portlet-name>
+		<display-name>productSender</display-name>
+		<portlet-class>com.vaadin.server.VaadinPortlet</portlet-class>
+		<init-param>
+			<name>UI</name>
+			<value>com.flufflicks.marketjournal.portal.applications.controller.OrderControllerUI</value>
+		</init-param>
+		<init-param>
+			<name>style</name>
+			<value>height:400px</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Product Sender Portlet</title>
+			<short-title>product-sender-portlet-short</short-title>
+		</portlet-info>
+	</portlet>
+	<portlet>
+		<portlet-name>porductReceiver</portlet-name>
+		<display-name>porductReceiver</display-name>
+		<portlet-class>com.vaadin.server.VaadinPortlet</portlet-class>
+		<init-param>
+			<name>UI</name>
+			<value>com.flufflicks.marketjournal.portal.applications.controller.ProductReceiverControllerUI</value>
+		</init-param>
+		<init-param>
+			<name>style</name>
+			<value>height:300px</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Product Receiver Portlet</title>
+			<short-title>product-receiver-portlet-short</short-title>
+		</portlet-info>
+	</portlet>
+
+</portlet-app>
