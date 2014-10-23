@@ -49,6 +49,7 @@ public class OrderPresenter implements Presenter, ClickListener, ValueChangeList
 	private void saveOrder(){
 		final String instrument = (String) this.view.getSelectCurrency().getValue();
 		final String orderType = (String) this.view.getOrderType().getValue();
+		final String strategy = (String) this.view.getStrategy().getValue();
 		final long openPrice = (Long) this.view.getOpenPrice().getConvertedValue();
 		final long closePrice = (Long) this.view.getClosePrice().getConvertedValue();
 		final int tp = (Integer) this.view.getTp().getConvertedValue();
@@ -59,6 +60,7 @@ public class OrderPresenter implements Presenter, ClickListener, ValueChangeList
 		final OrderData orderData = new OrderData();
 		orderData.setInstrument(instrument);
 		orderData.setOrderType(orderType);
+		orderData.setStrategy(strategy);
 		orderData.setOpenPrice(openPrice);
 		orderData.setClosePrice(closePrice);
 		orderData.setTp(tp);

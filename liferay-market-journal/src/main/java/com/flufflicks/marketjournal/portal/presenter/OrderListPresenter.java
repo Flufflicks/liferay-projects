@@ -2,7 +2,7 @@ package com.flufflicks.marketjournal.portal.presenter;
 
 import java.util.List;
 
-import com.flufflicks.marketjournal.portal.applications.controller.ProductReceiverControllerUI;
+import com.flufflicks.marketjournal.portal.applications.controller.OrderListControllerUI;
 import com.flufflicks.marketjournal.portal.ui.views.OrderListView;
 import com.flufflicks.marketjournal.spring.bo.OrderDataBo;
 import com.flufflicks.marketjournal.spring.bridge.SpringBoHelper;
@@ -19,6 +19,7 @@ public class OrderListPresenter implements Presenter {
 	private final OrderListView view;
 
 	final LiferayIPC liferayipc = new LiferayIPC();
+	
 
 	static final String ORDER_TYPE = "orderType";
 	
@@ -34,7 +35,7 @@ public class OrderListPresenter implements Presenter {
 	
 	private final OrderDataBo orderDataBo = SpringBoHelper.getOrderDataBo();
 
-	public OrderListPresenter(final OrderListView view, final ProductReceiverControllerUI controller) {
+	public OrderListPresenter(final OrderListView view, final OrderListControllerUI controller) {
 		liferayipc.extend(controller);
 		this.view = view;
 	}
@@ -44,6 +45,7 @@ public class OrderListPresenter implements Presenter {
 		setupIpc();
 		setupIndexContainer();
 		setupOrderTable();
+
 	}
 
 	private void setupIndexContainer() {
@@ -53,22 +55,29 @@ public class OrderListPresenter implements Presenter {
 		ic.addContainerProperty(OPEN_PRICE, Long.class, "");
 		ic.addContainerProperty(CLOSE_PRICE, Long.class, "");
 		ic.addContainerProperty(GUV, Long.class, "");
+		
+		loadData(ic);
+		view.getOrderTable().setContainerDataSource(ic);
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void loadData(final IndexedContainer ic) {
+		ic.removeAllItems();
 
 		final List<OrderData> orderList = orderDataBo.findAll();
 		for (final OrderData orderData : orderList) {
-			final Object id = ic.addItem();
-			ic.getContainerProperty(id, ORDER_TYPE).setValue(orderData.getOrderType());
-			ic.getContainerProperty(id, STRATEGY).setValue(orderData.getStrategy());
-			ic.getContainerProperty(id, OPEN_PRICE).setValue(orderData.getOpenPrice());
-			ic.getContainerProperty(id, CLOSE_PRICE).setValue(orderData.getClosePrice());
-			ic.getContainerProperty(id, GUV).setValue(orderData.getGuv());
+			ic.addItem(orderData.getId());
+			ic.getContainerProperty(orderData.getId(), ORDER_TYPE).setValue(orderData.getOrderType());
+			ic.getContainerProperty(orderData.getId(), STRATEGY).setValue(orderData.getStrategy());
+			ic.getContainerProperty(orderData.getId(), OPEN_PRICE).setValue(orderData.getOpenPrice());
+			ic.getContainerProperty(orderData.getId(), CLOSE_PRICE).setValue(orderData.getClosePrice());
+			ic.getContainerProperty(orderData.getId(), GUV).setValue(orderData.getGuv());
 		}
-
-		this.view.setOrderContainer(ic);
 	}
 	
+
 	private void setupOrderTable() {
-		view.getOrderTable().setContainerDataSource(view.getOrderContainer());
 		view.getOrderTable().setVisibleColumns(new String[] { ORDER_TYPE, STRATEGY, OPEN_PRICE, CLOSE_PRICE, GUV });
 		view.getOrderTable().setSelectable(true);
 		view.getOrderTable().setImmediate(true);
@@ -90,7 +99,9 @@ public class OrderListPresenter implements Presenter {
 			@Override
 			public void eventReceived(final LiferayIPCEvent event) {
 				Notification.show("Got event " + event.getEventId() + " with data " + event.getData());
-				setText(event.getData());
+				// refreshData method doesnt work here:( 
+				setupIndexContainer();
+
 			}
 		});
 	}

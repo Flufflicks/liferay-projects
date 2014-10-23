@@ -29,7 +29,7 @@
 		<portlet-class>com.vaadin.server.VaadinPortlet</portlet-class>
 		<init-param>
 			<name>UI</name>
-			<value>com.flufflicks.marketjournal.portal.applications.controller.ProductReceiverControllerUI</value>
+			<value>com.flufflicks.marketjournal.portal.applications.controller.OrderListControllerUI</value>
 		</init-param>
 		<init-param>
 			<name>style</name>

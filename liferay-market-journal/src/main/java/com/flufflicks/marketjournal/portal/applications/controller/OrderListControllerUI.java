@@ -8,7 +8,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
-public class ProductReceiverControllerUI extends UI {
+public class OrderListControllerUI extends UI {
 
 	private final OrderListView view = new OrderListView();
 	private OrderListPresenter presenter;

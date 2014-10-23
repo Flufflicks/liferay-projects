@@ -20,8 +20,6 @@ public class OrderListView extends VerticalLayout implements View {
 
 	private final Table orderTable = new Table();
 
-	IndexedContainer orderContainer = null;
-
 	private final Label label = new Label();
 
 	public OrderListView() {
@@ -52,14 +50,6 @@ public class OrderListView extends VerticalLayout implements View {
 
 	public Label getLabel() {
 		return label;
-	}
-	
-	public IndexedContainer getOrderContainer(){
-		return orderContainer;
-	}
-	
-	public void setOrderContainer(final IndexedContainer orderContainer){
-		this.orderContainer =  orderContainer;
 	}
 	
 	public Table getOrderTable(){
