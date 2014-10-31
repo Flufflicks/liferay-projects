@@ -1,7 +1,9 @@
 package com.flufflicks.marketjournal.portal.ui.views;
 
-import com.vaadin.data.util.converter.StringToIntegerConverter;
-import com.vaadin.data.util.converter.StringToLongConverter;
+import com.flufflicks.marketjournal.portal.validator.FloatValidator;
+import com.flufflicks.marketjournal.portal.validator.IntValidator;
+import com.flufflicks.marketjournal.spring.model.OrderData;
+import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
@@ -28,9 +30,10 @@ public class OrderView extends VerticalLayout implements View {
 
 	private final TextField guv = new TextField("GUV");
 
-
-
 	private final Button eventButton = new Button("Hinzufügen");
+	
+	final BeanFieldGroup<OrderData> beanFieldGroup = new BeanFieldGroup<OrderData>(OrderData.class);
+
 
 	public OrderView() {
 		setupView();
@@ -40,10 +43,9 @@ public class OrderView extends VerticalLayout implements View {
 		setupLayout();
 
 		final VerticalSplitPanel sample = new VerticalSplitPanel();
-        sample.setSizeFull();
-        sample.setSplitPosition(150, Unit.PIXELS);
- 
-		
+		sample.setSizeFull();
+		sample.setSplitPosition(150, Unit.PIXELS);
+
 		// Währungsdropdown
 		selectCurrency.addItem("EUR/USD");
 		selectCurrency.addItem("USD/JPY");
@@ -51,7 +53,9 @@ public class OrderView extends VerticalLayout implements View {
 		selectCurrency.addItem("NZD/USD");
 		selectCurrency.addItem("USD/CAD");
 		selectCurrency.setNullSelectionAllowed(false);
-		selectCurrency.setValue(1);
+		selectCurrency.setRequired(true);
+		selectCurrency.setDescription("Position");
+		selectCurrency.setRequiredError("Bitte wählen Sie eine Position!");
 		selectCurrency.setImmediate(true);
 
 		orderType.addItem("BUY");
@@ -59,58 +63,73 @@ public class OrderView extends VerticalLayout implements View {
 		orderType.addItem("BUY Entry");
 		orderType.addItem("SELL Entry");
 		orderType.setNullSelectionAllowed(false);
-		orderType.setValue(1);
+		orderType.setRequired(true);
+		orderType.setDescription("Ordertyp");
+		orderType.setRequiredError("Bitte wählen Sie eine Ordertyp!");
 		orderType.setImmediate(true);
 
-		openPrice.setImmediate(true);
-		openPrice.setInputPrompt("...");
-		openPrice.setConverter(new StringToLongConverter());
-		openPrice.setValidationVisible(true);
-		openPrice.setMaxLength(10);
-
-		closePrice.setImmediate(true);
-		closePrice.setInputPrompt("...");
-		closePrice.setConverter(new StringToLongConverter());
-		closePrice.setValidationVisible(true);
-		closePrice.setMaxLength(10);
-		
-		tp.setImmediate(true);
-		tp.setInputPrompt("...");
-		tp.setConverter(new StringToIntegerConverter());
-		tp.setValidationVisible(true);
-		tp.setMaxLength(10);
-		
-		sl.setImmediate(true);
-		sl.setInputPrompt("...");
-		sl.setConverter(new StringToIntegerConverter());
-		sl.setValidationVisible(true);
-		sl.setMaxLength(10);
-		
-		guv.setImmediate(true);
-		guv.setInputPrompt("...");
-		guv.setConverter(new StringToLongConverter());
-		guv.setValidationVisible(true);
-		guv.setMaxLength(10);
-		
 		strategy.addItem("Flaggenausbruch");
 		strategy.addItem("EMATrend");
 		strategy.addItem("Wiederstandsausbruch");
 		strategy.addItem("London Breakout");
 		strategy.setNullSelectionAllowed(false);
-		strategy.setValue(1);
-		strategy.setImmediate(true);
+		strategy.setRequired(true);
+		strategy.setDescription("Strategie des Trades");
+		strategy.setRequiredError("Bitte wählen Sie eine Strategie!");
+		strategy.setImmediate(true);		
+		
+		openPrice.setImmediate(true);
+		openPrice.setInputPrompt("...");
+		openPrice.addValidator(new FloatValidator());
+		openPrice.setRequired(true);
+		openPrice.setDescription("Eröffnungspreis");
+		openPrice.setRequiredError("Bitte tragen Sie einen Wert ein!");
+		openPrice.setValidationVisible(true);
+		openPrice.setMaxLength(10);
 
+		closePrice.setImmediate(true);
+		closePrice.setInputPrompt("...");
+		closePrice.addValidator(new FloatValidator());
+		closePrice.setDescription("Schlußpreis");
+		closePrice.setValidationVisible(true);
+		closePrice.setMaxLength(10);
+
+		tp.setImmediate(true);
+		tp.setInputPrompt("...");
+		tp.addValidator(new IntValidator());
+		tp.setValidationVisible(true);
+		tp.setRequired(true);
+		tp.setDescription("TakeProfit in Pips");
+		tp.setRequiredError("Bitte tragen Sie einen Wert ein!");
+		tp.setMaxLength(10);
+
+		sl.setImmediate(true);
+		sl.setInputPrompt("...");
+		sl.addValidator(new IntValidator());
+		sl.setValidationVisible(true);
+		sl.setRequired(true);
+		sl.setDescription("StopLoss in Pips");
+		sl.setRequiredError("Bitte tragen Sie einen Wert ein!");
+		sl.setMaxLength(10);
+
+		guv.setImmediate(true);
+		guv.setInputPrompt("...");
+		guv.addValidator(new IntValidator());
+		guv.setValidationVisible(true);
+		guv.setDescription("Gewin/Verlust in Pips");
+		guv.setMaxLength(10);
+		
 		mainLayout0.addComponent(selectCurrency);
 		mainLayout0.addComponent(orderType);
 		mainLayout0.addComponent(strategy);
-
 		mainLayout0.addComponent(openPrice);
 		mainLayout0.addComponent(closePrice);
 		mainLayout0.addComponent(sl);
 		mainLayout0.addComponent(tp);
 		mainLayout0.addComponent(guv);
 
-		
+		new BeanFieldGroup<OrderData>(OrderData.class);
+
 		mainLayout0.addComponent(eventButton);
 	}
 

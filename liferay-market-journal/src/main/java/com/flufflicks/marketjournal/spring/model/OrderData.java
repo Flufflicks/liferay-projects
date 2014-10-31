@@ -26,10 +26,10 @@ public class OrderData implements java.io.Serializable  {
 	private String orderType;
 	
 	@Column(name = "OPEN_RPICE")
-	private long openPrice;
+	private float openPrice;
 	
 	@Column(name = "CLOSE_PRICE")
-	private long closePrice;
+	private float closePrice;
 	
 	@Column(name = "TP")
 	private int tp;
@@ -38,7 +38,7 @@ public class OrderData implements java.io.Serializable  {
 	private int sl;
 	
 	@Column(name = "GUV")
-	private long guv;
+	private int guv;
 	
 	@Column(name = "STRATEGY")
 	private String strategy;
@@ -51,19 +51,19 @@ public class OrderData implements java.io.Serializable  {
 		this.instrument = instrument;
 	}
 
-	public long getOpenPrice() {
+	public float getOpenPrice() {
 		return openPrice;
 	}
 
-	public void setOpenPrice(final long openPrice) {
+	public void setOpenPrice(final float openPrice) {
 		this.openPrice = openPrice;
 	}
 
-	public long getClosePrice() {
+	public float getClosePrice() {
 		return closePrice;
 	}
 
-	public void setClosePrice(final long closePrice) {
+	public void setClosePrice(final float closePrice) {
 		this.closePrice = closePrice;
 	}
 
@@ -83,11 +83,11 @@ public class OrderData implements java.io.Serializable  {
 		this.sl = sl;
 	}
 
-	public long getGuv() {
+	public int getGuv() {
 		return guv;
 	}
 
-	public void setGuv(final long guv) {
+	public void setGuv(final int guv) {
 		this.guv = guv;
 	}
 

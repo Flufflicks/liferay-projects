@@ -5,14 +5,14 @@
 	<portlet>
 		<!-- Matches definition in portlet.xml. -->
 		<!-- Note: Must not be the same as servlet name. -->
-		<portlet-name>productReceiver</portlet-name>
+		<portlet-name>orderList</portlet-name>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<ajaxable>false</ajaxable>
 	</portlet>
 	<portlet>
 		<!-- Matches definition in portlet.xml. -->
 		<!-- Note: Must not be the same as servlet name. -->
-		<portlet-name>productSender</portlet-name>
+		<portlet-name>addOrder</portlet-name>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<ajaxable>false</ajaxable>
 	</portlet>

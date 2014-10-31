@@ -3,7 +3,7 @@
 
 <display>
 	<category name="category.vaadin">
-		<portlet id="porductReceiver" />
-		<portlet id="productSender" />
+		<portlet id="addOrder" />
+		<portlet id="orderList" />
 	</category>
 </display>

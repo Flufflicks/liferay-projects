@@ -52,9 +52,9 @@ public class OrderListPresenter implements Presenter {
 		final IndexedContainer ic = new IndexedContainer();
 		ic.addContainerProperty(ORDER_TYPE, String.class, "");
 		ic.addContainerProperty(STRATEGY, String.class, "");
-		ic.addContainerProperty(OPEN_PRICE, Long.class, "");
-		ic.addContainerProperty(CLOSE_PRICE, Long.class, "");
-		ic.addContainerProperty(GUV, Long.class, "");
+		ic.addContainerProperty(OPEN_PRICE, Float.class, "");
+		ic.addContainerProperty(CLOSE_PRICE, Float.class, "");
+		ic.addContainerProperty(GUV, Integer.class, "");
 		
 		loadData(ic);
 		view.getOrderTable().setContainerDataSource(ic);
@@ -110,8 +110,5 @@ public class OrderListPresenter implements Presenter {
 	public void unbind() {
 	}
 
-	public void setText(final String text) {
-		view.getLabel().setValue(text);
-	}
 
 }
