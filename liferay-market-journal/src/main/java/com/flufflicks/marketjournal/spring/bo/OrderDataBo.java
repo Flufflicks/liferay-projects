@@ -6,9 +6,8 @@ import com.flufflicks.marketjournal.spring.model.OrderData;
 
 public interface OrderDataBo {
 
-		void save(OrderData stock);
-		void update(OrderData stock);
-		void delete(OrderData stock);
+		void saveOrUpdate(OrderData orderData);
+		void delete(OrderData orderData);
 		List<OrderData> findAll();
 		OrderData findById(long id);
 

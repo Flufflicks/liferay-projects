@@ -79,8 +79,13 @@ public class OrderPresenter implements Presenter, ClickListener {
 			orderData.setOrderType(orderType);
 			orderData.setStrategy(strategy);
 		}
+		
+		final String order = this.view.getIdLabel().getValue();
+		if (order != null) {
+			orderData.setId(Long.valueOf(order));
+		}
 		if (fieldsValid && selectsValid) {
-			orderDataBo.save(orderData);
+			orderDataBo.saveOrUpdate(orderData);
 		}
 	}
 
@@ -137,6 +142,7 @@ public class OrderPresenter implements Presenter, ClickListener {
 
 	private void loadOrder(final long orderId) {
 		final OrderData orderData = orderDataBo.findById(orderId);
+		this.view.getIdLabel().setValue(String.valueOf(orderId));
 		this.view.getSelectCurrency().setValue(orderData.getInstrument());
 		this.view.getOrderType().setValue(orderData.getOrderType());
 		this.view.getStrategy().setValue(orderData.getStrategy());

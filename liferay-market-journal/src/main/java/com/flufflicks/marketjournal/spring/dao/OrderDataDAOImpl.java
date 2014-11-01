@@ -17,6 +17,7 @@ public class OrderDataDAOImpl extends CustomHibernateDaoSupport implements Order
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void update(final OrderData orderData) {
 		getHibernateTemplate().update(orderData);
 

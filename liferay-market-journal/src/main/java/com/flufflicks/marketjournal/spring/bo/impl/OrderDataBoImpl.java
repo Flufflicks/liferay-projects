@@ -15,20 +15,20 @@ public class OrderDataBoImpl implements OrderDataBo {
 	
 	@Autowired
 	OrderDataDAO dao;
-
+	
 	@Override
-	public void save(final OrderData orderData) {
+	public void saveOrUpdate(final OrderData orderData) {
 		final long companyId = VaadinPortalUtil.getCompanyId();
 		final long userId = VaadinPortalUtil.getUserId();
-
 		orderData.setCompanyId(companyId);
 		orderData.setUserId(userId);
-		dao.save(orderData);
-	}
+		
+		if (orderData.getId() != 0L){
+			dao.update(orderData);
+		} else{
+			dao.save(orderData);
+		}
 
-	@Override
-	public void update(final OrderData orderData) {
-		dao.update(orderData);
 	}
 
 	@Override
@@ -48,6 +48,5 @@ public class OrderDataBoImpl implements OrderDataBo {
 	
 		return dao.findAllByCompanyIdAndUser(companyId,userId);
 	}
-
 
 }

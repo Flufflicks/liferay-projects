@@ -7,6 +7,7 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
@@ -19,6 +20,8 @@ public class OrderView extends VerticalLayout implements View {
 	private static final long serialVersionUID = -3398565663865641952L;
 	private final VerticalLayout mainLayout0 = new VerticalLayout();
 
+	private final Label idLabel = new Label();
+	
 	private final NativeSelect selectCurrency = new NativeSelect("Währungspaar");
 	private final NativeSelect orderType = new NativeSelect("Order Typ");
 	private final NativeSelect strategy = new NativeSelect("Strategie");
@@ -30,7 +33,7 @@ public class OrderView extends VerticalLayout implements View {
 
 	private final TextField guv = new TextField("GUV");
 
-	private final Button eventButton = new Button("Hinzufügen");
+	private final Button eventButton = new Button("Speichern");
 	
 	final BeanFieldGroup<OrderData> beanFieldGroup = new BeanFieldGroup<OrderData>(OrderData.class);
 
@@ -119,6 +122,7 @@ public class OrderView extends VerticalLayout implements View {
 		guv.setDescription("Gewin/Verlust in Pips");
 		guv.setMaxLength(10);
 		
+		mainLayout0.addComponent(idLabel);
 		mainLayout0.addComponent(selectCurrency);
 		mainLayout0.addComponent(orderType);
 		mainLayout0.addComponent(strategy);
@@ -146,6 +150,10 @@ public class OrderView extends VerticalLayout implements View {
 		return eventButton;
 	}
 
+	public Label getIdLabel(){
+		return idLabel;
+	}
+	
 	public NativeSelect getSelectCurrency() {
 		return selectCurrency;
 	}
