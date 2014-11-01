@@ -19,7 +19,10 @@ public class OrderDataBoImpl implements OrderDataBo {
 	@Override
 	public void save(final OrderData orderData) {
 		final long companyId = VaadinPortalUtil.getCompanyId();
+		final long userId = VaadinPortalUtil.getUserId();
+
 		orderData.setCompanyId(companyId);
+		orderData.setUserId(userId);
 		dao.save(orderData);
 	}
 
@@ -41,7 +44,9 @@ public class OrderDataBoImpl implements OrderDataBo {
 	@Override
 	public List<OrderData> findAll() {
 		final long companyId = VaadinPortalUtil.getCompanyId();
-		return dao.findAllByCompanyId(companyId);
+		final long userId = VaadinPortalUtil.getUserId();
+	
+		return dao.findAllByCompanyIdAndUser(companyId,userId);
 	}
 
 

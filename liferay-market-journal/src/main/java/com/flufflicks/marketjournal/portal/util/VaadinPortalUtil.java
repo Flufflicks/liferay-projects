@@ -14,4 +14,11 @@ public class VaadinPortalUtil {
 		return companyId;
 	}
 
+	public static long getUserId() {
+		final PortletRequest req = VaadinPortletService.getCurrentPortletRequest();
+		// get the companyId
+		final long userId = PortalUtil.getUserId(req);
+		return userId;
+	}
+
 }

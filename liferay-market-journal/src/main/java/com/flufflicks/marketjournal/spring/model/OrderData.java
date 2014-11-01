@@ -46,6 +46,8 @@ public class OrderData implements java.io.Serializable  {
 	@Column(name = "COMPANY_ID")
 	private long companyId;
 	
+	@Column(name = "USER_ID")
+	private long userId;
 	
 	public String getInstrument() {
 		return instrument;
@@ -125,6 +127,14 @@ public class OrderData implements java.io.Serializable  {
 
 	public void setCompanyId(final long companyId) {
 		this.companyId = companyId;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(final long userId) {
+		this.userId = userId;
 	}
 
 }
