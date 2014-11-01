@@ -10,5 +10,5 @@ public interface OrderDataDAO {
 	void update(OrderData orderData);
 	void delete(OrderData orderData);
 	OrderData findById(long id);
-	List<OrderData> findAll();
+	List<OrderData> findAllByCompanyId(long companyId);
 }

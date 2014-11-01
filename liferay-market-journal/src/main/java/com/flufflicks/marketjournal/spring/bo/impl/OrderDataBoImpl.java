@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.flufflicks.marketjournal.portal.util.VaadinPortalUtil;
 import com.flufflicks.marketjournal.spring.bo.OrderDataBo;
 import com.flufflicks.marketjournal.spring.dao.OrderDataDAO;
 import com.flufflicks.marketjournal.spring.model.OrderData;
@@ -17,6 +18,8 @@ public class OrderDataBoImpl implements OrderDataBo {
 
 	@Override
 	public void save(final OrderData orderData) {
+		final long companyId = VaadinPortalUtil.getCompanyId();
+		orderData.setCompanyId(companyId);
 		dao.save(orderData);
 	}
 
@@ -37,7 +40,8 @@ public class OrderDataBoImpl implements OrderDataBo {
 	
 	@Override
 	public List<OrderData> findAll() {
-		return dao.findAll();
+		final long companyId = VaadinPortalUtil.getCompanyId();
+		return dao.findAllByCompanyId(companyId);
 	}
 
 
