@@ -2,40 +2,40 @@ package com.flufflicks.marketjournal.portal.presenter;
 
 import com.flufflicks.marketjournal.portal.applications.controller.OrderControllerUI;
 import com.flufflicks.marketjournal.portal.ui.views.OrderView;
+import com.flufflicks.marketjournal.portal.util.IpcConstants;
 import com.flufflicks.marketjournal.portal.util.TextConverterUtil;
 import com.flufflicks.marketjournal.spring.bo.OrderDataBo;
 import com.flufflicks.marketjournal.spring.bridge.SpringBoHelper;
 import com.flufflicks.marketjournal.spring.model.OrderData;
 import com.vaadin.addon.ipcforliferay.LiferayIPC;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.addon.ipcforliferay.event.LiferayIPCEvent;
+import com.vaadin.addon.ipcforliferay.event.LiferayIPCEventListener;
 import com.vaadin.data.Validator.EmptyValueException;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.NativeSelect;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 
-public class OrderPresenter implements Presenter, ClickListener, ValueChangeListener {
+public class OrderPresenter implements Presenter, ClickListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	private final OrderView view;
-	private final LiferayIPC liferayIpc = new LiferayIPC();
+	private final LiferayIPC liferayipc = new LiferayIPC();
 	private final OrderDataBo orderDataBo = SpringBoHelper.getOrderDataBo();
 
 	public OrderPresenter(final OrderView view, final OrderControllerUI controller) {
 		this.view = view;
-		liferayIpc.extend(controller);
+		liferayipc.extend(controller);
 	}
 
 	@Override
 	public void bind() {
+		setupIpc();
 		view.getEventButton().addClickListener(this);
 	}
 
@@ -47,16 +47,14 @@ public class OrderPresenter implements Presenter, ClickListener, ValueChangeList
 	@Override
 	public void buttonClick(final ClickEvent event) {
 		if (event.getButton() == view.getEventButton()) {
-			liferayIpc.sendEvent("theEventId", "This is Data");
+			liferayipc.sendEvent(IpcConstants.EVENT_RELOAD_ORDERS, null);
 			saveOrder();
 		}
 	}
 
 	private void saveOrder() {
 		this.view.getOpenPrice().setValidationVisible(false);
-
 		final OrderData orderData = new OrderData();
-
 		final boolean fieldsValid = validateOrderTextFields();
 		if (fieldsValid) {
 			final float openPrice = TextConverterUtil.getFloatValue(this.view.getOpenPrice().getValue());
@@ -124,10 +122,29 @@ public class OrderPresenter implements Presenter, ClickListener, ValueChangeList
 		return true;
 	}
 
-	@Override
-	public void valueChange(final ValueChangeEvent event) {
-		final String valueString = String.valueOf(event.getProperty().getValue());
-		Notification.show("Value changed:", valueString, Type.TRAY_NOTIFICATION);
+	private void setupIpc() {
+		liferayipc.addLiferayIPCEventListener(IpcConstants.EVENT_LOAD_ORDER, new LiferayIPCEventListener() {
+			@Override
+			public void eventReceived(final LiferayIPCEvent event) {
+//				Notification.show("Got event " + event.getEventId() + " with data " + event.getData());
+				final String orderIdString = event.getData();
+				final long orderId = Long.valueOf(orderIdString);
+				loadOrder(orderId);
+			}
 
+		});
 	}
+
+	private void loadOrder(final long orderId) {
+		final OrderData orderData = orderDataBo.findById(orderId);
+		this.view.getSelectCurrency().setValue(orderData.getInstrument());
+		this.view.getOrderType().setValue(orderData.getOrderType());
+		this.view.getStrategy().setValue(orderData.getStrategy());
+		this.view.getOpenPrice().setValue(String.valueOf(orderData.getOpenPrice()));
+		this.view.getClosePrice().setValue(String.valueOf(orderData.getClosePrice()));
+		this.view.getSl().setValue(String.valueOf(orderData.getSl()));
+		this.view.getTp().setValue(String.valueOf(orderData.getTp()));
+		this.view.getGuv().setValue(String.valueOf(orderData.getGuv()));
+	}
+
 }
