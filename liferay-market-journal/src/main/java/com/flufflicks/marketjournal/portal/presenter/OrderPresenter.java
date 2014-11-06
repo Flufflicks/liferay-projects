@@ -1,5 +1,8 @@
 package com.flufflicks.marketjournal.portal.presenter;
 
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+
 import com.flufflicks.marketjournal.portal.applications.controller.OrderControllerUI;
 import com.flufflicks.marketjournal.portal.ui.views.OrderView;
 import com.flufflicks.marketjournal.portal.util.IpcConstants;
@@ -13,6 +16,7 @@ import com.vaadin.addon.ipcforliferay.event.LiferayIPCEventListener;
 import com.vaadin.data.Validator.EmptyValueException;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.server.UserError;
+import com.vaadin.server.VaadinPortletService;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.NativeSelect;
@@ -37,6 +41,22 @@ public class OrderPresenter implements Presenter, ClickListener {
 	public void bind() {
 		setupIpc();
 		view.getEventButton().addClickListener(this);
+		addPositions();
+	}
+
+	private void addPositions() {
+		final PortletRequest req = VaadinPortletService.getCurrentPortletRequest();
+		final PortletPreferences prefs = req.getPreferences();
+		final String p = prefs.getValue("positions", "");
+		final String[] positions = p.split(",");
+		for (final String position : positions) {
+			this.view.getSelectCurrency().addItem(position);
+		}
+		final String s = prefs.getValue("strategies", "");
+		final String[] strategies = s.split(",");
+		for (final String strategy : strategies) {
+			this.view.getStrategy().addItem(strategy);
+		}
 	}
 
 	@Override
@@ -79,9 +99,9 @@ public class OrderPresenter implements Presenter, ClickListener {
 			orderData.setOrderType(orderType);
 			orderData.setStrategy(strategy);
 		}
-		
+
 		final String order = this.view.getIdLabel().getValue();
-		if (order != null) {
+		if (order != null && order.length() != 0) {
 			orderData.setId(Long.valueOf(order));
 		}
 		if (fieldsValid && selectsValid) {
@@ -131,7 +151,8 @@ public class OrderPresenter implements Presenter, ClickListener {
 		liferayipc.addLiferayIPCEventListener(IpcConstants.EVENT_LOAD_ORDER, new LiferayIPCEventListener() {
 			@Override
 			public void eventReceived(final LiferayIPCEvent event) {
-//				Notification.show("Got event " + event.getEventId() + " with data " + event.getData());
+				// Notification.show("Got event " + event.getEventId() +
+				// " with data " + event.getData());
 				final String orderIdString = event.getData();
 				final long orderId = Long.valueOf(orderIdString);
 				loadOrder(orderId);

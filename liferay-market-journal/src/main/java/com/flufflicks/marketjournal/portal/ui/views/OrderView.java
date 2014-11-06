@@ -1,5 +1,9 @@
 package com.flufflicks.marketjournal.portal.ui.views;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import com.flufflicks.marketjournal.portal.util.VaadinPortalUtil;
 import com.flufflicks.marketjournal.portal.validator.FloatValidator;
 import com.flufflicks.marketjournal.portal.validator.IntValidator;
 import com.flufflicks.marketjournal.spring.model.OrderData;
@@ -21,7 +25,7 @@ public class OrderView extends VerticalLayout implements View {
 	private final VerticalLayout mainLayout0 = new VerticalLayout();
 
 	private final Label idLabel = new Label();
-	
+
 	private final NativeSelect selectCurrency = new NativeSelect("Währungspaar");
 	private final NativeSelect orderType = new NativeSelect("Order Typ");
 	private final NativeSelect strategy = new NativeSelect("Strategie");
@@ -33,28 +37,24 @@ public class OrderView extends VerticalLayout implements View {
 
 	private final TextField guv = new TextField("GUV");
 
-	private final Button eventButton = new Button("Speichern");
-	
-	final BeanFieldGroup<OrderData> beanFieldGroup = new BeanFieldGroup<OrderData>(OrderData.class);
+	private final Button saveButton = new Button();
 
+	final BeanFieldGroup<OrderData> beanFieldGroup = new BeanFieldGroup<OrderData>(OrderData.class);
 
 	public OrderView() {
 		setupView();
 	}
 
 	private void setupView() {
+		final Locale currentLocale = VaadinPortalUtil.getCurrentLocale();
+		final ResourceBundle messages = ResourceBundle.getBundle("i18n", currentLocale);
+		
 		setupLayout();
-
 		final VerticalSplitPanel sample = new VerticalSplitPanel();
 		sample.setSizeFull();
 		sample.setSplitPosition(150, Unit.PIXELS);
 
-		// Währungsdropdown
-		selectCurrency.addItem("EUR/USD");
-		selectCurrency.addItem("USD/JPY");
-		selectCurrency.addItem("EUR/JPY");
-		selectCurrency.addItem("NZD/USD");
-		selectCurrency.addItem("USD/CAD");
+		// add positions from property
 		selectCurrency.setNullSelectionAllowed(false);
 		selectCurrency.setRequired(true);
 		selectCurrency.setDescription("Position");
@@ -71,16 +71,12 @@ public class OrderView extends VerticalLayout implements View {
 		orderType.setRequiredError("Bitte wählen Sie eine Ordertyp!");
 		orderType.setImmediate(true);
 
-		strategy.addItem("Flaggenausbruch");
-		strategy.addItem("EMATrend");
-		strategy.addItem("Wiederstandsausbruch");
-		strategy.addItem("London Breakout");
 		strategy.setNullSelectionAllowed(false);
 		strategy.setRequired(true);
 		strategy.setDescription("Strategie des Trades");
 		strategy.setRequiredError("Bitte wählen Sie eine Strategie!");
-		strategy.setImmediate(true);		
-		
+		strategy.setImmediate(true);
+
 		openPrice.setImmediate(true);
 		openPrice.setInputPrompt("...");
 		openPrice.addValidator(new FloatValidator());
@@ -121,7 +117,9 @@ public class OrderView extends VerticalLayout implements View {
 		guv.setValidationVisible(true);
 		guv.setDescription("Gewin/Verlust in Pips");
 		guv.setMaxLength(10);
-		
+
+		saveButton.setCaption(messages.getString("label.save"));
+
 		mainLayout0.addComponent(idLabel);
 		mainLayout0.addComponent(selectCurrency);
 		mainLayout0.addComponent(orderType);
@@ -134,7 +132,7 @@ public class OrderView extends VerticalLayout implements View {
 
 		new BeanFieldGroup<OrderData>(OrderData.class);
 
-		mainLayout0.addComponent(eventButton);
+		mainLayout0.addComponent(saveButton);
 	}
 
 	private void setupLayout() {
@@ -147,13 +145,13 @@ public class OrderView extends VerticalLayout implements View {
 	}
 
 	public Button getEventButton() {
-		return eventButton;
+		return saveButton;
 	}
 
-	public Label getIdLabel(){
+	public Label getIdLabel() {
 		return idLabel;
 	}
-	
+
 	public NativeSelect getSelectCurrency() {
 		return selectCurrency;
 	}

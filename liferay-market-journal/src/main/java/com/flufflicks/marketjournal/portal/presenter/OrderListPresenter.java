@@ -97,7 +97,6 @@ public class OrderListPresenter implements Presenter {
 				// " with data " + event.getData());
 				// refreshData method doesnt work here:(
 				setupIndexContainer();
-
 			}
 		});
 	}

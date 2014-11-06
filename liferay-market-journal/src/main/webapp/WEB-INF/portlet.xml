@@ -12,16 +12,27 @@
 		</init-param>
 		<init-param>
 			<name>style</name>
-			<value>height:400px</value>
+			<value>height:460px</value>
 		</init-param>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
+			<portlet-mode>edit</portlet-mode>
 		</supports>
 		<portlet-info>
 			<title>Add Order Portlet</title>
 			<short-title>add-order-short</short-title>
 		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>positions</name>
+				<value>EUR/USD,USD/CAD</value>
+			</preference>
+			<preference>
+				<name>strategies</name>
+				<value>EMATrend,Breakout</value>
+			</preference>
+		</portlet-preferences>
 	</portlet>
 	<portlet>
 		<portlet-name>orderList</portlet-name>
@@ -33,7 +44,7 @@
 		</init-param>
 		<init-param>
 			<name>style</name>
-			<value>height:300px</value>
+			<value>height:460px</value>
 		</init-param>
 		<supports>
 			<mime-type>text/html</mime-type>
