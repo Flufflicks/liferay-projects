@@ -57,53 +57,53 @@ public class OrderView extends VerticalLayout implements View {
 		// add positions from property
 		selectCurrency.setNullSelectionAllowed(false);
 		selectCurrency.setRequired(true);
-		selectCurrency.setDescription("Position");
-		selectCurrency.setRequiredError("Bitte wählen Sie eine Position!");
+		selectCurrency.setDescription(messages.getString("orderview.position.description"));
+		selectCurrency.setRequiredError(messages.getString("orderview.position.error"));
 		selectCurrency.setImmediate(true);
 
-		orderType.addItem("BUY");
-		orderType.addItem("SELL");
-		orderType.addItem("BUY Entry");
-		orderType.addItem("SELL Entry");
+		orderType.addItem(messages.getString("orderview.ordertype.buy"));
+		orderType.addItem(messages.getString("orderview.ordertype.sell"));
+		orderType.addItem(messages.getString("orderview.ordertype.buyentry"));
+		orderType.addItem(messages.getString("orderview.ordertype.sellentry"));
 		orderType.setNullSelectionAllowed(false);
 		orderType.setRequired(true);
-		orderType.setDescription("Ordertyp");
-		orderType.setRequiredError("Bitte wählen Sie eine Ordertyp!");
+		orderType.setDescription(messages.getString("orderview.ordertype.description"));
+		orderType.setRequiredError(messages.getString("orderview.ordertype.error"));
 		orderType.setImmediate(true);
 
 		strategy.setNullSelectionAllowed(false);
 		strategy.setRequired(true);
-		strategy.setDescription("Strategie des Trades");
-		strategy.setRequiredError("Bitte wählen Sie eine Strategie!");
+		strategy.setDescription(messages.getString("orderview.strategy.description"));
+		strategy.setRequiredError(messages.getString("orderview.strategy.error"));
 		strategy.setImmediate(true);
 
 		openPrice.setImmediate(true);
-		openPrice.setInputPrompt("...");
+		openPrice.setInputPrompt(messages.getString("label.placeholder"));
 		openPrice.addValidator(new FloatValidator());
 		openPrice.setRequired(true);
-		openPrice.setDescription("Eröffnungspreis");
-		openPrice.setRequiredError("Bitte tragen Sie einen Wert ein!");
+		openPrice.setDescription(messages.getString("orderview.openprice.description"));
+		openPrice.setRequiredError(messages.getString("orderview.openprice.error"));
 		openPrice.setValidationVisible(true);
 		openPrice.setMaxLength(10);
 
 		closePrice.setImmediate(true);
-		closePrice.setInputPrompt("...");
+		closePrice.setInputPrompt(messages.getString("label.placeholder"));
 		closePrice.addValidator(new FloatValidator());
-		closePrice.setDescription("Schlußpreis");
+		closePrice.setDescription(messages.getString("orderview.closeprice.description"));
 		closePrice.setValidationVisible(true);
 		closePrice.setMaxLength(10);
 
 		tp.setImmediate(true);
-		tp.setInputPrompt("...");
+		tp.setInputPrompt(messages.getString("label.placeholder"));
 		tp.addValidator(new IntValidator());
 		tp.setValidationVisible(true);
 		tp.setRequired(true);
-		tp.setDescription("TakeProfit in Pips");
-		tp.setRequiredError("Bitte tragen Sie einen Wert ein!");
+		tp.setDescription(messages.getString("orderview.tp.description"));
+		tp.setRequiredError(messages.getString("orderview.tp.error"));
 		tp.setMaxLength(10);
 
 		sl.setImmediate(true);
-		sl.setInputPrompt("...");
+		sl.setInputPrompt(messages.getString("label.placeholder"));
 		sl.addValidator(new IntValidator());
 		sl.setValidationVisible(true);
 		sl.setRequired(true);
@@ -112,10 +112,10 @@ public class OrderView extends VerticalLayout implements View {
 		sl.setMaxLength(10);
 
 		guv.setImmediate(true);
-		guv.setInputPrompt("...");
+		guv.setInputPrompt(messages.getString("label.placeholder"));
 		guv.addValidator(new IntValidator());
 		guv.setValidationVisible(true);
-		guv.setDescription("Gewin/Verlust in Pips");
+		guv.setDescription(messages.getString("orderview.guv.description"));
 		guv.setMaxLength(10);
 
 		saveButton.setCaption(messages.getString("label.save"));
