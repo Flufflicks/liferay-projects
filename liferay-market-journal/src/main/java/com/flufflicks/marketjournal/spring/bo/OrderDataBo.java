@@ -10,5 +10,5 @@ public interface OrderDataBo {
 		void delete(OrderData orderData);
 		List<OrderData> findAll();
 		OrderData findById(long id);
-
+		
 }

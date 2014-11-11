@@ -11,4 +11,5 @@ public interface OrderDataDAO {
 	void delete(OrderData orderData);
 	OrderData findById(long id);
 	List<OrderData> findAllByCompanyIdAndUser(long companyId, long userId);
+	
 }

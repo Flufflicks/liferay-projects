@@ -48,5 +48,5 @@ public class OrderDataBoImpl implements OrderDataBo {
 	
 		return dao.findAllByCompanyIdAndUser(companyId,userId);
 	}
-
+		
 }

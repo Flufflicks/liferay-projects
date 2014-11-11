@@ -55,5 +55,26 @@
 			<short-title>order-list-portlet-short</short-title>
 		</portlet-info>
 	</portlet>
+	<portlet>
+		<portlet-name>orderStats</portlet-name>
+		<display-name>orderStats</display-name>
+		<portlet-class>com.vaadin.server.VaadinPortlet</portlet-class>
+		<init-param>
+			<name>UI</name>
+			<value>com.flufflicks.marketjournal.portal.applications.controller.OrderStatsControllerUI</value>
+		</init-param>
+		<init-param>
+			<name>style</name>
+			<value>height:550px</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+		</supports>
+		<portlet-info>
+			<title>Order Statistik Portlet</title>
+			<short-title>order-stats-portlet-short</short-title>
+		</portlet-info>
+	</portlet>
 
 </portlet-app>
