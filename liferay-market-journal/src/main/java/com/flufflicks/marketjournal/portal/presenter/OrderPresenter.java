@@ -42,7 +42,7 @@ public class OrderPresenter implements Presenter, ClickListener {
 	private void addPositions() {
 		final PortletRequest req = VaadinPortletService.getCurrentPortletRequest();
 		final PortletPreferences prefs = req.getPreferences();
-		
+
 		final String p = prefs.getValue("positions", "");
 		final String[] positions = p.split(",");
 		this.view.addPositions(positions);
@@ -93,10 +93,9 @@ public class OrderPresenter implements Presenter, ClickListener {
 			orderData.setStrategy(strategy);
 		}
 
-		final String order = this.view.getIdLabel().getValue();
-		if (order != null && order.length() != 0) {
-			orderData.setId(Long.valueOf(order));
-		}
+		final long orderId = this.view.getOrderId();
+		orderData.setId(orderId);
+
 		if (fieldsValid && selectsValid) {
 			orderDataBo.saveOrUpdate(orderData);
 		}
@@ -118,7 +117,7 @@ public class OrderPresenter implements Presenter, ClickListener {
 
 	private void loadOrder(final long orderId) {
 		final OrderData orderData = orderDataBo.findById(orderId);
-		this.view.getIdLabel().setValue(String.valueOf(orderId));
+		this.view.setOrderId(orderId);
 		this.view.setSelectCurrency(orderData.getInstrument());
 		this.view.setOrderType(orderData.getOrderType());
 		this.view.setStrategy(orderData.getStrategy());

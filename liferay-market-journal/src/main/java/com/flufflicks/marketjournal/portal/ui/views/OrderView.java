@@ -14,7 +14,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
@@ -27,7 +26,7 @@ public class OrderView extends VerticalLayout implements View {
 	private static final long serialVersionUID = -3398565663865641952L;
 	private final VerticalLayout mainLayout0 = new VerticalLayout();
 
-	private final Label idLabel = new Label();
+	private long orderId;
 
 	private final NativeSelect selectCurrency = new NativeSelect("Währungspaar");
 	private final NativeSelect orderType = new NativeSelect("Order Typ");
@@ -124,7 +123,6 @@ public class OrderView extends VerticalLayout implements View {
 
 		saveButton.setCaption(messages.getString("label.save"));
 
-		mainLayout0.addComponent(idLabel);
 		mainLayout0.addComponent(selectCurrency);
 		mainLayout0.addComponent(orderType);
 		mainLayout0.addComponent(strategy);
@@ -202,10 +200,6 @@ public class OrderView extends VerticalLayout implements View {
 		return saveButton;
 	}
 
-	public Label getIdLabel() {
-		return idLabel;
-	}
-
 	public String getSelectCurrency() {
 		return (String) selectCurrency.getValue();
 	}
@@ -241,6 +235,10 @@ public class OrderView extends VerticalLayout implements View {
 	public String getGuv() {
 		return guv.getValue();
 	}
+	
+	public long getOrderId() {
+		return orderId;
+	}
 		
 	
 	public void setSelectCurrency(final String value) {
@@ -273,6 +271,10 @@ public class OrderView extends VerticalLayout implements View {
 
 	public void setGuv(final String value) {
 		guv.setValue(value);;
+	}
+
+	public void setOrderId(final long orderId) {
+		this.orderId = orderId;
 	}
 	
 }
