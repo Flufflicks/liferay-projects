@@ -1,10 +1,13 @@
 package com.flufflicks.marketjournal.portal.presenter;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import com.flufflicks.marketjournal.portal.applications.controller.OrderListControllerUI;
 import com.flufflicks.marketjournal.portal.ui.views.OrderListView;
 import com.flufflicks.marketjournal.portal.util.IpcConstants;
+import com.flufflicks.marketjournal.portal.util.VaadinPortalUtil;
 import com.flufflicks.marketjournal.spring.bo.OrderDataBo;
 import com.flufflicks.marketjournal.spring.bridge.SpringBoHelper;
 import com.flufflicks.marketjournal.spring.model.OrderData;
@@ -20,21 +23,21 @@ public class OrderListPresenter implements Presenter {
 
 	final LiferayIPC liferayipc = new LiferayIPC();
 
-	static final String ORDER_TYPE = "orderType";
+	static final String ORDER_TYPE = "orderlist.ordertype";
 
-	static final String STRATEGY = "strategy";
+	static final String STRATEGY = "orderlist.strategy";
 
-	static final String OPEN_PRICE = "openPrice";
+	static final String OPEN_PRICE = "orderlist.openPrice";
 
-	static final String CLOSE_PRICE = "closePrice";
+	static final String CLOSE_PRICE = "orderlist.closePrice";
 
-	static final String GUV = "guv";
+	static final String GUV = "orderlist.guv";
 
 	private final OrderDataBo orderDataBo = SpringBoHelper.getOrderDataBo();
 
 	public OrderListPresenter(final OrderListView view, final OrderListControllerUI controller) {
 		liferayipc.extend(controller);
-		this.view = view;
+		this.view = view;		
 	}
 
 	@Override
@@ -52,7 +55,6 @@ public class OrderListPresenter implements Presenter {
 		ic.addContainerProperty(OPEN_PRICE, Float.class, "");
 		ic.addContainerProperty(CLOSE_PRICE, Float.class, "");
 		ic.addContainerProperty(GUV, Integer.class, "");
-
 		loadData(ic);
 		view.getOrderTable().setContainerDataSource(ic);
 
@@ -74,8 +76,17 @@ public class OrderListPresenter implements Presenter {
 	}
 
 	private void setupOrderTable() {
+		final Locale currentLocale = VaadinPortalUtil.getCurrentLocale();
+		final ResourceBundle messages = ResourceBundle.getBundle("i18n", currentLocale);
+		
 		view.getOrderTable().setVisibleColumns(new String[] { ORDER_TYPE, STRATEGY, OPEN_PRICE, CLOSE_PRICE, GUV });
-		view.getOrderTable().setSelectable(true);
+		view.getOrderTable().setSelectable(true);		
+		view.getOrderTable().setColumnHeader(ORDER_TYPE, messages.getString(ORDER_TYPE));
+		view.getOrderTable().setColumnHeader(STRATEGY, messages.getString(STRATEGY));
+		view.getOrderTable().setColumnHeader(OPEN_PRICE, messages.getString(OPEN_PRICE));
+		view.getOrderTable().setColumnHeader(CLOSE_PRICE, messages.getString(CLOSE_PRICE));
+		view.getOrderTable().setColumnHeader(GUV, messages.getString(GUV));
+
 		view.getOrderTable().setImmediate(true);
 
 		view.getOrderTable().addValueChangeListener(new Property.ValueChangeListener() {

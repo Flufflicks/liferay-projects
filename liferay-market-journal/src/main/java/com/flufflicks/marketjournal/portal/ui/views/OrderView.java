@@ -53,6 +53,7 @@ public class OrderView extends VerticalLayout implements View {
 		final VerticalSplitPanel sample = new VerticalSplitPanel();
 		sample.setSizeFull();
 		sample.setSplitPosition(150, Unit.PIXELS);
+		
 
 		// add positions from property
 		selectCurrency.setNullSelectionAllowed(false);

@@ -3,11 +3,14 @@ package com.flufflicks.marketjournal.portal.presenter;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.jfree.data.general.DefaultPieDataset;
 
 import com.flufflicks.marketjournal.portal.ui.views.OrderStatsView;
+import com.flufflicks.marketjournal.portal.util.VaadinPortalUtil;
 import com.flufflicks.marketjournal.spring.bo.OrderDataBo;
 import com.flufflicks.marketjournal.spring.bridge.SpringBoHelper;
 import com.flufflicks.marketjournal.spring.model.OrderData;
@@ -28,9 +31,11 @@ public class OrderStatsPresenter implements Presenter {
 	public void bind() {
 		view.setCaption("");
 		final List<OrderData> orders = orderDataBo.findAll();
-
-		view.createPieChart(createOverviewDataset(orders), "Order Übersicht");
-		view.createPieChart(createWinLossDataset(orders), "GUV Verhältnis");
+		final Locale currentLocale = VaadinPortalUtil.getCurrentLocale();
+		final ResourceBundle messages = ResourceBundle.getBundle("i18n", currentLocale);
+		
+		view.createPieChart(createOverviewDataset(orders), messages.getString("orderstats.chart.overview"));
+		view.createPieChart(createWinLossDataset(orders), messages.getString("orderstats.chart.guvstats"));
 	}
 
 	/**

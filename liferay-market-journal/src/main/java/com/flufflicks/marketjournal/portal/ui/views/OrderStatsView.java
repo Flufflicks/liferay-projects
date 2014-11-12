@@ -1,5 +1,8 @@
 package com.flufflicks.marketjournal.portal.ui.views;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
@@ -7,6 +10,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.vaadin.addon.JFreeChartWrapper;
 
+import com.flufflicks.marketjournal.portal.util.VaadinPortalUtil;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.TabSheet;
@@ -56,7 +60,10 @@ public class OrderStatsView extends VerticalLayout implements View {
 				true, false);
 				
 		final PiePlot plot = (PiePlot) chart.getPlot();
-		plot.setNoDataMessage("No data available");
+		final Locale currentLocale = VaadinPortalUtil.getCurrentLocale();
+		final ResourceBundle messages = ResourceBundle.getBundle("i18n", currentLocale);
+		
+		plot.setNoDataMessage(messages.getString("orderlist.nodata"));
 		plot.setCircular(false);
 		plot.setLabelGap(0.02);
 		return chart;
