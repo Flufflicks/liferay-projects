@@ -13,14 +13,9 @@ import com.flufflicks.marketjournal.spring.model.OrderData;
 import com.vaadin.addon.ipcforliferay.LiferayIPC;
 import com.vaadin.addon.ipcforliferay.event.LiferayIPCEvent;
 import com.vaadin.addon.ipcforliferay.event.LiferayIPCEventListener;
-import com.vaadin.data.Validator.EmptyValueException;
-import com.vaadin.data.Validator.InvalidValueException;
-import com.vaadin.server.UserError;
 import com.vaadin.server.VaadinPortletService;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.NativeSelect;
-import com.vaadin.ui.TextField;
 
 public class OrderPresenter implements Presenter, ClickListener {
 	/**
@@ -47,16 +42,14 @@ public class OrderPresenter implements Presenter, ClickListener {
 	private void addPositions() {
 		final PortletRequest req = VaadinPortletService.getCurrentPortletRequest();
 		final PortletPreferences prefs = req.getPreferences();
+		
 		final String p = prefs.getValue("positions", "");
 		final String[] positions = p.split(",");
-		for (final String position : positions) {
-			this.view.getSelectCurrency().addItem(position);
-		}
+		this.view.addPositions(positions);
+
 		final String s = prefs.getValue("strategies", "");
 		final String[] strategies = s.split(",");
-		for (final String strategy : strategies) {
-			this.view.getStrategy().addItem(strategy);
-		}
+		this.view.addStrategies(strategies);
 	}
 
 	@Override
@@ -73,15 +66,15 @@ public class OrderPresenter implements Presenter, ClickListener {
 	}
 
 	private void saveOrder() {
-		this.view.getOpenPrice().setValidationVisible(false);
+		// this.view.getOpenPrice().setValidationVisible(false);
 		final OrderData orderData = new OrderData();
-		final boolean fieldsValid = validateOrderTextFields();
+		final boolean fieldsValid = view.validateOrderTextFields();
 		if (fieldsValid) {
-			final float openPrice = TextConverterUtil.getFloatValue(this.view.getOpenPrice().getValue());
-			final float closePrice = TextConverterUtil.getFloatValue(this.view.getClosePrice().getValue());
-			final int tp = TextConverterUtil.getIntValue(this.view.getTp().getValue());
-			final int sl = TextConverterUtil.getIntValue(this.view.getSl().getValue());
-			final int guv = TextConverterUtil.getIntValue(this.view.getGuv().getValue());
+			final float openPrice = TextConverterUtil.getFloatValue(this.view.getOpenPrice());
+			final float closePrice = TextConverterUtil.getFloatValue(this.view.getClosePrice());
+			final int tp = TextConverterUtil.getIntValue(this.view.getTp());
+			final int sl = TextConverterUtil.getIntValue(this.view.getSl());
+			final int guv = TextConverterUtil.getIntValue(this.view.getGuv());
 			//
 			orderData.setOpenPrice(openPrice);
 			orderData.setClosePrice(closePrice);
@@ -89,11 +82,11 @@ public class OrderPresenter implements Presenter, ClickListener {
 			orderData.setSl(sl);
 			orderData.setGuv(guv);
 		}
-		final boolean selectsValid = validateSelects();
+		final boolean selectsValid = view.validateSelects();
 		if (selectsValid) {
-			final String instrument = (String) this.view.getSelectCurrency().getValue();
-			final String orderType = (String) this.view.getOrderType().getValue();
-			final String strategy = (String) this.view.getStrategy().getValue();
+			final String instrument = this.view.getSelectCurrency();
+			final String orderType = this.view.getOrderType();
+			final String strategy = this.view.getStrategy();
 
 			orderData.setInstrument(instrument);
 			orderData.setOrderType(orderType);
@@ -107,44 +100,6 @@ public class OrderPresenter implements Presenter, ClickListener {
 		if (fieldsValid && selectsValid) {
 			orderDataBo.saveOrUpdate(orderData);
 		}
-	}
-
-	private boolean validateSelects() {
-		return validateSelect(this.view.getSelectCurrency()) && validateSelect(this.view.getOrderType()) && validateSelect(this.view.getStrategy());
-	}
-
-	private boolean validateSelect(final NativeSelect select) {
-		try {
-			select.validate();
-			select.setComponentError(null);
-		} catch (final EmptyValueException e) {
-			// do nothing
-			return false;
-		} catch (final InvalidValueException e) {
-
-			select.setComponentError(new UserError(e.getMessage()));
-			return false;
-		}
-		return true;
-	}
-
-	private boolean validateOrderTextFields() {
-		return validateTextField(this.view.getOpenPrice()) && validateTextField(this.view.getClosePrice()) && validateTextField(this.view.getSl());
-	}
-
-	private boolean validateTextField(final TextField textField) {
-		try {
-			textField.validate();
-			textField.setComponentError(null);
-		} catch (final EmptyValueException e) {
-			// do nothing
-			return false;
-		} catch (final InvalidValueException e) {
-
-			textField.setComponentError(new UserError(e.getMessage()));
-			return false;
-		}
-		return true;
 	}
 
 	private void setupIpc() {
@@ -164,14 +119,14 @@ public class OrderPresenter implements Presenter, ClickListener {
 	private void loadOrder(final long orderId) {
 		final OrderData orderData = orderDataBo.findById(orderId);
 		this.view.getIdLabel().setValue(String.valueOf(orderId));
-		this.view.getSelectCurrency().setValue(orderData.getInstrument());
-		this.view.getOrderType().setValue(orderData.getOrderType());
-		this.view.getStrategy().setValue(orderData.getStrategy());
-		this.view.getOpenPrice().setValue(String.valueOf(orderData.getOpenPrice()));
-		this.view.getClosePrice().setValue(String.valueOf(orderData.getClosePrice()));
-		this.view.getSl().setValue(String.valueOf(orderData.getSl()));
-		this.view.getTp().setValue(String.valueOf(orderData.getTp()));
-		this.view.getGuv().setValue(String.valueOf(orderData.getGuv()));
+		this.view.setSelectCurrency(orderData.getInstrument());
+		this.view.setOrderType(orderData.getOrderType());
+		this.view.setStrategy(orderData.getStrategy());
+		this.view.setOpenPrice(String.valueOf(orderData.getOpenPrice()));
+		this.view.setClosePrice(String.valueOf(orderData.getClosePrice()));
+		this.view.setSl(String.valueOf(orderData.getSl()));
+		this.view.setTp(String.valueOf(orderData.getTp()));
+		this.view.setGuv(String.valueOf(orderData.getGuv()));
 	}
 
 }

@@ -7,9 +7,12 @@ import com.flufflicks.marketjournal.portal.util.VaadinPortalUtil;
 import com.flufflicks.marketjournal.portal.validator.FloatValidator;
 import com.flufflicks.marketjournal.portal.validator.IntValidator;
 import com.flufflicks.marketjournal.spring.model.OrderData;
+import com.vaadin.data.Validator.EmptyValueException;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.UserError;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeSelect;
@@ -144,6 +147,56 @@ public class OrderView extends VerticalLayout implements View {
 	public void enter(final ViewChangeEvent event) {
 		Notification.show("ProductView");
 	}
+	
+	public void addPositions(final String[] positions) {
+		for (final String position : positions) {
+			this.selectCurrency.addItem(position);
+		}		
+	}
+	
+	public void addStrategies(final String[] strategies) {
+		for (final String strategy : strategies) {
+			this.strategy.addItem(strategy);
+		}
+	}		
+
+	public boolean validateOrderTextFields() {
+		return validateTextField(openPrice) && validateTextField(closePrice) && validateTextField(sl);
+	}
+	
+	private boolean validateTextField(final TextField textField) {
+		try {
+			textField.validate();
+			textField.setComponentError(null);
+		} catch (final EmptyValueException e) {
+			// do nothing
+			return false;
+		} catch (final InvalidValueException e) {
+
+			textField.setComponentError(new UserError(e.getMessage()));
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean validateSelects() {
+		return validateSelect(selectCurrency) && validateSelect(orderType) && validateSelect(strategy);
+	}
+
+	private boolean validateSelect(final NativeSelect select) {
+		try {
+			select.validate();
+			select.setComponentError(null);
+		} catch (final EmptyValueException e) {
+			// do nothing
+			return false;
+		} catch (final InvalidValueException e) {
+
+			select.setComponentError(new UserError(e.getMessage()));
+			return false;
+		}
+		return true;
+	}
 
 	public Button getEventButton() {
 		return saveButton;
@@ -153,39 +206,73 @@ public class OrderView extends VerticalLayout implements View {
 		return idLabel;
 	}
 
-	public NativeSelect getSelectCurrency() {
-		return selectCurrency;
+	public String getSelectCurrency() {
+		return (String) selectCurrency.getValue();
 	}
 
 	public VerticalLayout getMainLayout0() {
 		return mainLayout0;
 	}
 
-	public NativeSelect getOrderType() {
-		return orderType;
+	public String getOrderType() {
+		return (String) orderType.getValue();
 	}
 
-	public NativeSelect getStrategy() {
-		return strategy;
+	public String getStrategy() {
+		return (String) strategy.getValue();
 	}
 
-	public TextField getOpenPrice() {
-		return openPrice;
+	public String getOpenPrice() {
+		return openPrice.getValue();
 	}
 
-	public TextField getClosePrice() {
-		return closePrice;
+	public String getClosePrice() {
+		return closePrice.getValue();
 	}
 
-	public TextField getSl() {
-		return sl;
+	public String getSl() {
+		return sl.getValue();
 	}
 
-	public TextField getTp() {
-		return tp;
+	public String getTp() {
+		return tp.getValue();
 	}
 
-	public TextField getGuv() {
-		return guv;
+	public String getGuv() {
+		return guv.getValue();
 	}
+		
+	
+	public void setSelectCurrency(final String value) {
+		selectCurrency.setValue(value);;
+	}
+
+	public void setOrderType(final String value) {
+		orderType.setValue(value);
+	}
+
+	public void setStrategy(final String value) {
+		strategy.setValue(value);;
+	}
+
+	public void setOpenPrice(final String value) {
+		openPrice.setValue(value);;
+	}
+
+	public void setClosePrice(final String value) {
+		closePrice.setValue(value);
+	}
+
+	public void setSl(final String value) {
+		sl.setValue(value);;
+	}
+
+	public void setTp(final String value) {
+		tp.setValue(value);;
+	}
+
+	public void setGuv(final String value) {
+		guv.setValue(value);;
+	}
+	
 }
