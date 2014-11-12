@@ -14,6 +14,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
@@ -24,6 +25,8 @@ import com.vaadin.ui.VerticalSplitPanel;
 public class OrderView extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = -3398565663865641952L;
+	
+	public final static String SAVE_BTN_ID = "OV_BTN_SAVE";
 	private final VerticalLayout mainLayout0 = new VerticalLayout();
 
 	private long orderId;
@@ -122,7 +125,8 @@ public class OrderView extends VerticalLayout implements View {
 		guv.setMaxLength(10);
 
 		saveButton.setCaption(messages.getString("label.save"));
-
+		saveButton.setId(SAVE_BTN_ID);
+		
 		mainLayout0.addComponent(selectCurrency);
 		mainLayout0.addComponent(orderType);
 		mainLayout0.addComponent(strategy);
@@ -196,16 +200,8 @@ public class OrderView extends VerticalLayout implements View {
 		return true;
 	}
 
-	public Button getEventButton() {
-		return saveButton;
-	}
-
 	public String getSelectCurrency() {
 		return (String) selectCurrency.getValue();
-	}
-
-	public VerticalLayout getMainLayout0() {
-		return mainLayout0;
 	}
 
 	public String getOrderType() {
@@ -275,6 +271,14 @@ public class OrderView extends VerticalLayout implements View {
 
 	public void setOrderId(final long orderId) {
 		this.orderId = orderId;
+	}
+
+	public void addClickListener(final ClickListener listener) {
+		saveButton.addClickListener(listener);
+	}
+	
+	public void removeClickListener(final ClickListener listener) {
+		saveButton.removeClickListener(listener);
 	}
 	
 }

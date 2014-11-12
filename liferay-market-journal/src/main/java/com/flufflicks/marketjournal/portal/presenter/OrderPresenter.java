@@ -35,7 +35,7 @@ public class OrderPresenter implements Presenter, ClickListener {
 	@Override
 	public void bind() {
 		setupIpc();
-		view.getEventButton().addClickListener(this);
+		view.addClickListener(this);
 		addPositions();
 	}
 
@@ -54,12 +54,12 @@ public class OrderPresenter implements Presenter, ClickListener {
 
 	@Override
 	public void unbind() {
-		view.getEventButton().removeClickListener(this);
+		view.removeClickListener(this);
 	}
 
 	@Override
 	public void buttonClick(final ClickEvent event) {
-		if (event.getButton() == view.getEventButton()) {
+		if (event.getButton().getId() == OrderView.SAVE_BTN_ID) {
 			liferayipc.sendEvent(IpcConstants.EVENT_RELOAD_ORDERS, null);
 			saveOrder();
 		}
