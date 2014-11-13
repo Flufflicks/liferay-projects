@@ -18,36 +18,60 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.IndexedContainer;
 
+/**
+ * The Class OrderListPresenter.
+ */
 public class OrderListPresenter implements Presenter {
+	
+	/** The view. */
 	private final OrderListView view;
 
-	final LiferayIPC liferayipc = new LiferayIPC();
+	/** The liferayipc component for Inter-Portlet-Communication. */
+	private final LiferayIPC liferayipc = new LiferayIPC();
 
+	/** The Constant ORDER_TYPE. */
 	static final String ORDER_TYPE = "orderlist.ordertype";
 
+	/** The Constant STRATEGY. */
 	static final String STRATEGY = "orderlist.strategy";
 
+	/** The Constant OPEN_PRICE. */
 	static final String OPEN_PRICE = "orderlist.openPrice";
 
+	/** The Constant CLOSE_PRICE. */
 	static final String CLOSE_PRICE = "orderlist.closePrice";
 
+	/** The Constant GUV. */
 	static final String GUV = "orderlist.guv";
 
+	/** The order data bo. */
 	private final OrderDataBo orderDataBo = SpringBoHelper.getOrderDataBo();
 
-	public OrderListPresenter(final OrderListView view, final OrderListControllerUI controller) {
+	/**
+	 * Instantiates a new order list presenter.
+	 *
+	 * @param orderListView the view
+	 * @param controller the controller
+	 */
+	public OrderListPresenter(final OrderListView orderListView, final OrderListControllerUI controller) {
 		liferayipc.extend(controller);
-		this.view = view;		
+		this.view = orderListView;		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.portal.presenter.Presenter#bind()
+	 */
 	@Override
-	public void bind() {
+	public final void bind() {
 		setupIpc();
 		setupIndexContainer();
 		setupOrderTable();
 
 	}
 
+	/**
+	 * Setup index container.
+	 */
 	private void setupIndexContainer() {
 		final IndexedContainer ic = new IndexedContainer();
 		ic.addContainerProperty(ORDER_TYPE, String.class, "");
@@ -60,6 +84,11 @@ public class OrderListPresenter implements Presenter {
 
 	}
 
+	/**
+	 * Load data.
+	 *
+	 * @param ic the ic
+	 */
 	@SuppressWarnings("unchecked")
 	private void loadData(final IndexedContainer ic) {
 		ic.removeAllItems();
@@ -75,11 +104,14 @@ public class OrderListPresenter implements Presenter {
 		}
 	}
 
+	/**
+	 * Setup order table.
+	 */
 	private void setupOrderTable() {
 		final Locale currentLocale = VaadinPortalUtil.getCurrentLocale();
 		final ResourceBundle messages = ResourceBundle.getBundle("i18n", currentLocale);
 		
-		view.getOrderTable().setVisibleColumns(new String[] { ORDER_TYPE, STRATEGY, OPEN_PRICE, CLOSE_PRICE, GUV });
+		view.getOrderTable().setVisibleColumns(new Object[] { ORDER_TYPE, STRATEGY, OPEN_PRICE, CLOSE_PRICE, GUV });
 		view.getOrderTable().setSelectable(true);		
 		view.getOrderTable().setColumnHeader(ORDER_TYPE, messages.getString(ORDER_TYPE));
 		view.getOrderTable().setColumnHeader(STRATEGY, messages.getString(STRATEGY));
@@ -90,6 +122,11 @@ public class OrderListPresenter implements Presenter {
 		view.getOrderTable().setImmediate(true);
 
 		view.getOrderTable().addValueChangeListener(new Property.ValueChangeListener() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -1585214975533338551L;
+
 			@Override
 			public void valueChange(final ValueChangeEvent event) {
 				final Long orderId = (Long) view.getOrderTable().getValue();
@@ -100,8 +137,16 @@ public class OrderListPresenter implements Presenter {
 		});
 	}
 
+	/**
+	 * Setup ipc.
+	 */
 	private void setupIpc() {
 		liferayipc.addLiferayIPCEventListener(IpcConstants.EVENT_RELOAD_ORDERS, new LiferayIPCEventListener() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1197880924185747454L;
+
 			@Override
 			public void eventReceived(final LiferayIPCEvent event) {
 				// Notification.show("Got event " + event.getEventId() +
@@ -112,6 +157,9 @@ public class OrderListPresenter implements Presenter {
 		});
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.portal.presenter.Presenter#unbind()
+	 */
 	@Override
 	public void unbind() {
 	}

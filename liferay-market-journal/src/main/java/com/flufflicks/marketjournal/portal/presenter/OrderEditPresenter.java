@@ -8,20 +8,35 @@ import com.flufflicks.marketjournal.portal.util.VaadinPortalUtil;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
+/**
+ * The Class OrderEditPresenter.
+ */
 public class OrderEditPresenter implements Presenter, ClickListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+
+	/** The Constant serialVersionUID. */
+	private static final long serialVersionUID = 3536805609526001984L;
+
+	/** The view. */
 	private final OrderEditView view;
 
-	public OrderEditPresenter(final OrderEditView view) {
-		this.view = view;
+	/**
+	 * Instantiates a new order edit presenter.
+	 *
+	 * @param orderView
+	 *            the view
+	 */
+	public OrderEditPresenter(final OrderEditView orderView) {
+		this.view = orderView;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.vaadin.ui.Button.ClickListener#buttonClick(com.vaadin.ui.Button.
+	 * ClickEvent)
+	 */
 	@Override
-	public void buttonClick(final ClickEvent event) {
+	public final void buttonClick(final ClickEvent event) {
 		final PortletPreferences prefs = VaadinPortalUtil.getPortletPrefs();
 		try {
 			prefs.setValue("positions", this.view.getPositions());
@@ -31,8 +46,13 @@ public class OrderEditPresenter implements Presenter, ClickListener {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.flufflicks.marketjournal.portal.presenter.Presenter#bind()
+	 */
 	@Override
-	public void bind() {
+	public final void bind() {
 		this.view.addClickListener(this);
 
 		final PortletPreferences prefs = VaadinPortalUtil.getPortletPrefs();
@@ -44,8 +64,13 @@ public class OrderEditPresenter implements Presenter, ClickListener {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.flufflicks.marketjournal.portal.presenter.Presenter#unbind()
+	 */
 	@Override
-	public void unbind() {
+	public final void unbind() {
 		this.view.removeClickListener(this);
 	}
 

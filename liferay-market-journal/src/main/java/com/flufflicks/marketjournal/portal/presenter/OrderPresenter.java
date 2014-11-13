@@ -17,28 +17,47 @@ import com.vaadin.server.VaadinPortletService;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
+/**
+ * The Class OrderPresenter.
+ */
 public class OrderPresenter implements Presenter, ClickListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
+	/** The Constant serialVersionUID. */
+	private static final long serialVersionUID = 2586287264036274600L;
+
+	/** The view. */
 	private final OrderView view;
+	
+	/** The liferayipc component for Inter-Portlet-Communication. */
 	private final LiferayIPC liferayipc = new LiferayIPC();
+	
+	/** The order data bussiness object. */
 	private final OrderDataBo orderDataBo = SpringBoHelper.getOrderDataBo();
 
-	public OrderPresenter(final OrderView view, final OrderControllerUI controller) {
-		this.view = view;
+	/**
+	 * Instantiates a new order presenter.
+	 *
+	 * @param orderView the view
+	 * @param controller the controller
+	 */
+	public OrderPresenter(final OrderView orderView, final OrderControllerUI controller) {
+		this.view = orderView;
 		liferayipc.extend(controller);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.portal.presenter.Presenter#bind()
+	 */
 	@Override
-	public void bind() {
+	public final void bind() {
 		setupIpc();
 		view.addClickListener(this);
 		addPositions();
 	}
 
+	/**
+	 * Adds the positions from portlet properties.
+	 */
 	private void addPositions() {
 		final PortletRequest req = VaadinPortletService.getCurrentPortletRequest();
 		final PortletPreferences prefs = req.getPreferences();
@@ -52,19 +71,28 @@ public class OrderPresenter implements Presenter, ClickListener {
 		this.view.addStrategies(strategies);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.portal.presenter.Presenter#unbind()
+	 */
 	@Override
-	public void unbind() {
+	public final void unbind() {
 		view.removeClickListener(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.vaadin.ui.Button.ClickListener#buttonClick(com.vaadin.ui.Button.ClickEvent)
+	 */
 	@Override
-	public void buttonClick(final ClickEvent event) {
+	public final void buttonClick(final ClickEvent event) {
 		if (event.getButton().getId() == OrderView.SAVE_BTN_ID) {
 			liferayipc.sendEvent(IpcConstants.EVENT_RELOAD_ORDERS, null);
 			saveOrder();
 		}
 	}
 
+	/**
+	 * Save the order in database.
+	 */
 	private void saveOrder() {
 		// this.view.getOpenPrice().setValidationVisible(false);
 		final OrderData orderData = new OrderData();
@@ -84,7 +112,7 @@ public class OrderPresenter implements Presenter, ClickListener {
 		}
 		final boolean selectsValid = view.validateSelects();
 		if (selectsValid) {
-			final String instrument = this.view.getSelectCurrency();
+			final String instrument = this.view.getSelectedCurrency();
 			final String orderType = this.view.getOrderType();
 			final String strategy = this.view.getStrategy();
 
@@ -101,8 +129,16 @@ public class OrderPresenter implements Presenter, ClickListener {
 		}
 	}
 
+	/**
+	 * Setup Inter-Portlet-Communication.
+	 */
 	private void setupIpc() {
 		liferayipc.addLiferayIPCEventListener(IpcConstants.EVENT_LOAD_ORDER, new LiferayIPCEventListener() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -2243135528770194481L;
+
 			@Override
 			public void eventReceived(final LiferayIPCEvent event) {
 				// Notification.show("Got event " + event.getEventId() +
@@ -115,6 +151,11 @@ public class OrderPresenter implements Presenter, ClickListener {
 		});
 	}
 
+	/**
+	 * Load order from database.
+	 *
+	 * @param orderId the order id
+	 */
 	private void loadOrder(final long orderId) {
 		final OrderData orderData = orderDataBo.findById(orderId);
 		this.view.setOrderId(orderId);

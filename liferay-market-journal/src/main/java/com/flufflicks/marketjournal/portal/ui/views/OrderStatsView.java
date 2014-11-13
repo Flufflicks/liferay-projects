@@ -16,20 +16,38 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * The Class OrderStatsView to display the statistic charts.
+ */
 public class OrderStatsView extends VerticalLayout implements View {
 	
-	private final VerticalLayout mainLayout0 = new VerticalLayout();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2174989853292280782L;
+
+	/** The LABEL_GAP. */
+	private static final double LABEL_GAP = 0.02;
+	
+	/** The tab sheet for the different charts. */
 	private final TabSheet tabSheet = new TabSheet();
 	
+	/**
+	 * Instantiates a new order stats view.
+	 */
 	public OrderStatsView() {
-//		addComponent(mainLayout0);
 		tabSheet.setHeight("500px");
 		tabSheet.addStyleName("padded-tabbar");
-//		mainLayout0.addComponent(tabSheet);
 		addComponent(tabSheet);
 	}
 	
-	public void createPieChart(final DefaultPieDataset dataSet, final String title) {
+	/**
+	 * Creates the pie chart.
+	 *
+	 * @param dataSet the data set
+	 * @param title the title
+	 */
+	public final void createPieChart(final DefaultPieDataset dataSet, final String title) {
 		final JFreeChart chart = createchart(dataSet, title);
 		final JFreeChartWrapper chartWrapper = new JFreeChartWrapper(chart);
 		chartWrapper.setWidth("600px");
@@ -38,7 +56,10 @@ public class OrderStatsView extends VerticalLayout implements View {
 		tabSheet.addTab(layout, title);
 	}
 	
-	public void removeTabs(){
+	/**
+	 * Removes the tabs (used for view reloading).
+	 */
+	public final void removeTabs() {
 		tabSheet.removeAllComponents();
 	}
 
@@ -46,10 +67,9 @@ public class OrderStatsView extends VerticalLayout implements View {
 
 	/**
 	 * Creates a sample chart.
-	 * 
-	 * @param dataset
-	 *            the dataset.
-	 * 
+	 *
+	 * @param dataset            the dataset.
+	 * @param title the title
 	 * @return The chart.
 	 */
 	private JFreeChart createchart(final PieDataset dataset, final String title) {
@@ -65,11 +85,14 @@ public class OrderStatsView extends VerticalLayout implements View {
 		
 		plot.setNoDataMessage(messages.getString("orderlist.nodata"));
 		plot.setCircular(false);
-		plot.setLabelGap(0.02);
+		plot.setLabelGap(LABEL_GAP);
 		return chart;
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.vaadin.navigator.View#enter(com.vaadin.navigator.ViewChangeListener.ViewChangeEvent)
+	 */
 	@Override
 	public void enter(final ViewChangeEvent event) {
 

@@ -6,10 +6,8 @@ import java.util.ResourceBundle;
 import com.flufflicks.marketjournal.portal.util.VaadinPortalUtil;
 import com.flufflicks.marketjournal.portal.validator.FloatValidator;
 import com.flufflicks.marketjournal.portal.validator.IntValidator;
-import com.flufflicks.marketjournal.spring.model.OrderData;
 import com.vaadin.data.Validator.EmptyValueException;
 import com.vaadin.data.Validator.InvalidValueException;
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.UserError;
@@ -19,51 +17,74 @@ import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.VerticalSplitPanel;
 
-/** A start view for navigating to the main view */
+/**
+ *  The OrderView class for create and edit orders.
+ */
 public class OrderView extends VerticalLayout implements View {
 
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -3398565663865641952L;
 	
-	public final static String SAVE_BTN_ID = "OV_BTN_SAVE";
+	/** The Constant SAVE_BTN_ID to ident the button in clicklistener method. */
+	public static final String SAVE_BTN_ID = "OV_BTN_SAVE";
+
+	/** The Constant textfield max length. */
+	private static final int TF_MAX_LENGTH = 10;
+	
+	/** The main layout. */
 	private final VerticalLayout mainLayout0 = new VerticalLayout();
 
+	/** The order id to link the order to databaseobject. */
 	private long orderId;
 
-	private final NativeSelect selectCurrency = new NativeSelect("Währungspaar");
-	private final NativeSelect orderType = new NativeSelect("Order Typ");
-	private final NativeSelect strategy = new NativeSelect("Strategie");
+	/** The select field for the instrument. */
+	private final NativeSelect selectCurrency = new NativeSelect();
+	
+	/** The select field for the order type. */
+	private final NativeSelect orderType = new NativeSelect();
+	
+	/** The  select field for the strategy. */
+	private final NativeSelect strategy = new NativeSelect();
 
-	private final TextField openPrice = new TextField("Open Preis");
-	private final TextField closePrice = new TextField("Close Preis");
-	private final TextField sl = new TextField("Stop Loss");
-	private final TextField tp = new TextField("Take Profit");
+	/** The open price textfield. */
+	private final TextField openPrice = new TextField();
+	
+	/** The close price textfield. */
+	private final TextField closePrice = new TextField();
+	
+	/** The sl textfield. */
+	private final TextField sl = new TextField();
+	
+	/** The tp textfield. */
+	private final TextField tp = new TextField();
 
-	private final TextField guv = new TextField("GUV");
+	/** The guv textfield. */
+	private final TextField guv = new TextField();
 
+	/** The save button. */
 	private final Button saveButton = new Button();
 
-	final BeanFieldGroup<OrderData> beanFieldGroup = new BeanFieldGroup<OrderData>(OrderData.class);
-
+	/**
+	 * Instantiates a new order view.
+	 */
 	public OrderView() {
 		setupView();
 	}
 
+	/**
+	 * Setup the view.
+	 */
 	private void setupView() {
 		final Locale currentLocale = VaadinPortalUtil.getCurrentLocale();
 		final ResourceBundle messages = ResourceBundle.getBundle("i18n", currentLocale);
 		
-		setupLayout();
-		final VerticalSplitPanel sample = new VerticalSplitPanel();
-		sample.setSizeFull();
-		sample.setSplitPosition(150, Unit.PIXELS);
-		
+		setupLayout();		
 
 		// add positions from property
 		selectCurrency.setNullSelectionAllowed(false);
 		selectCurrency.setRequired(true);
-		selectCurrency.setDescription(messages.getString("orderview.position.description"));
+		selectCurrency.setCaption(messages.getString("orderview.position.description"));
 		selectCurrency.setRequiredError(messages.getString("orderview.position.error"));
 		selectCurrency.setImmediate(true);
 
@@ -73,13 +94,13 @@ public class OrderView extends VerticalLayout implements View {
 		orderType.addItem(messages.getString("orderview.ordertype.sellentry"));
 		orderType.setNullSelectionAllowed(false);
 		orderType.setRequired(true);
-		orderType.setDescription(messages.getString("orderview.ordertype.description"));
+		orderType.setCaption(messages.getString("orderview.ordertype.description"));
 		orderType.setRequiredError(messages.getString("orderview.ordertype.error"));
 		orderType.setImmediate(true);
 
 		strategy.setNullSelectionAllowed(false);
 		strategy.setRequired(true);
-		strategy.setDescription(messages.getString("orderview.strategy.description"));
+		strategy.setCaption(messages.getString("orderview.strategy.description"));
 		strategy.setRequiredError(messages.getString("orderview.strategy.error"));
 		strategy.setImmediate(true);
 
@@ -87,42 +108,42 @@ public class OrderView extends VerticalLayout implements View {
 		openPrice.setInputPrompt(messages.getString("label.placeholder"));
 		openPrice.addValidator(new FloatValidator());
 		openPrice.setRequired(true);
-		openPrice.setDescription(messages.getString("orderview.openprice.description"));
+		openPrice.setCaption(messages.getString("orderview.openprice.description"));
 		openPrice.setRequiredError(messages.getString("orderview.openprice.error"));
 		openPrice.setValidationVisible(true);
-		openPrice.setMaxLength(10);
+		openPrice.setMaxLength(TF_MAX_LENGTH);
 
 		closePrice.setImmediate(true);
 		closePrice.setInputPrompt(messages.getString("label.placeholder"));
 		closePrice.addValidator(new FloatValidator());
-		closePrice.setDescription(messages.getString("orderview.closeprice.description"));
+		closePrice.setCaption(messages.getString("orderview.closeprice.description"));
 		closePrice.setValidationVisible(true);
-		closePrice.setMaxLength(10);
+		closePrice.setMaxLength(TF_MAX_LENGTH);
 
 		tp.setImmediate(true);
 		tp.setInputPrompt(messages.getString("label.placeholder"));
 		tp.addValidator(new IntValidator());
 		tp.setValidationVisible(true);
 		tp.setRequired(true);
-		tp.setDescription(messages.getString("orderview.tp.description"));
+		tp.setCaption(messages.getString("orderview.tp.description"));
 		tp.setRequiredError(messages.getString("orderview.tp.error"));
-		tp.setMaxLength(10);
+		tp.setMaxLength(TF_MAX_LENGTH);
 
 		sl.setImmediate(true);
 		sl.setInputPrompt(messages.getString("label.placeholder"));
 		sl.addValidator(new IntValidator());
 		sl.setValidationVisible(true);
 		sl.setRequired(true);
-		sl.setDescription("StopLoss in Pips");
-		sl.setRequiredError("Bitte tragen Sie einen Wert ein!");
-		sl.setMaxLength(10);
+		sl.setCaption(messages.getString("orderview.sl.description"));
+		sl.setRequiredError(messages.getString("orderview.sl.error"));
+		sl.setMaxLength(TF_MAX_LENGTH);
 
 		guv.setImmediate(true);
 		guv.setInputPrompt(messages.getString("label.placeholder"));
 		guv.addValidator(new IntValidator());
 		guv.setValidationVisible(true);
-		guv.setDescription(messages.getString("orderview.guv.description"));
-		guv.setMaxLength(10);
+		guv.setCaption(messages.getString("orderview.guv.description"));
+		guv.setMaxLength(TF_MAX_LENGTH);
 
 		saveButton.setCaption(messages.getString("label.save"));
 		saveButton.setId(SAVE_BTN_ID);
@@ -136,36 +157,61 @@ public class OrderView extends VerticalLayout implements View {
 		mainLayout0.addComponent(tp);
 		mainLayout0.addComponent(guv);
 
-		new BeanFieldGroup<OrderData>(OrderData.class);
-
 		mainLayout0.addComponent(saveButton);
 	}
 
+	/**
+	 * Setup the layout.
+	 */
 	private void setupLayout() {
 		addComponent(mainLayout0);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.vaadin.navigator.View#enter(com.vaadin.navigator.ViewChangeListener.ViewChangeEvent)
+	 */
 	@Override
-	public void enter(final ViewChangeEvent event) {
+	public final void enter(final ViewChangeEvent event) {
 		Notification.show("ProductView");
 	}
 	
-	public void addPositions(final String[] positions) {
+	/**
+	 * Adds the positions to the select.
+	 *
+	 * @param positions the positions
+	 */
+	public final void addPositions(final String[] positions) {
 		for (final String position : positions) {
 			this.selectCurrency.addItem(position);
 		}		
 	}
 	
-	public void addStrategies(final String[] strategies) {
-		for (final String strategy : strategies) {
-			this.strategy.addItem(strategy);
+	/**
+	 * Adds the strategies to the select.
+	 *
+	 * @param strategies the strategies
+	 */
+	public final void addStrategies(final String[] strategies) {
+		for (final String str : strategies) {
+			this.strategy.addItem(str);
 		}
 	}		
 
-	public boolean validateOrderTextFields() {
+	/**
+	 * Validate order text fields.
+	 *
+	 * @return true, if successful
+	 */
+	public final boolean validateOrderTextFields() {
 		return validateTextField(openPrice) && validateTextField(closePrice) && validateTextField(sl);
 	}
 	
+	/**
+	 * Validate a text field and add the error indicator.
+	 *
+	 * @param textField the text field
+	 * @return true, if successful
+	 */
 	private boolean validateTextField(final TextField textField) {
 		try {
 			textField.validate();
@@ -181,10 +227,21 @@ public class OrderView extends VerticalLayout implements View {
 		return true;
 	}
 	
-	public boolean validateSelects() {
+	/**
+	 * Validate the select fields.
+	 *
+	 * @return true, if successful
+	 */
+	public final boolean validateSelects() {
 		return validateSelect(selectCurrency) && validateSelect(orderType) && validateSelect(strategy);
 	}
 
+	/**
+	 * Validate a select field and add the error indicator.
+	 *
+	 * @param select the select
+	 * @return true, if successful
+	 */
 	private boolean validateSelect(final NativeSelect select) {
 		try {
 			select.validate();
@@ -200,84 +257,184 @@ public class OrderView extends VerticalLayout implements View {
 		return true;
 	}
 
-	public String getSelectCurrency() {
+	/**
+	 * Gets the selected currency.
+	 *
+	 * @return the selected currency
+	 */
+	public final String getSelectedCurrency() {
 		return (String) selectCurrency.getValue();
 	}
 
-	public String getOrderType() {
+	/**
+	 * Gets the order type.
+	 *
+	 * @return the order type
+	 */
+	public final String getOrderType() {
 		return (String) orderType.getValue();
 	}
 
-	public String getStrategy() {
+	/**
+	 * Gets the strategy.
+	 *
+	 * @return the strategy
+	 */
+	public final String getStrategy() {
 		return (String) strategy.getValue();
 	}
 
-	public String getOpenPrice() {
+	/**
+	 * Gets the open price.
+	 *
+	 * @return the open price
+	 */
+	public final String getOpenPrice() {
 		return openPrice.getValue();
 	}
 
-	public String getClosePrice() {
+	/**
+	 * Gets the close price.
+	 *
+	 * @return the close price
+	 */
+	public final String getClosePrice() {
 		return closePrice.getValue();
 	}
 
-	public String getSl() {
+	/**
+	 * Gets the sl.
+	 *
+	 * @return the sl
+	 */
+	public final String getSl() {
 		return sl.getValue();
 	}
 
-	public String getTp() {
+	/**
+	 * Gets the tp.
+	 *
+	 * @return the tp
+	 */
+	public final String getTp() {
 		return tp.getValue();
 	}
 
-	public String getGuv() {
+	/**
+	 * Gets the guv.
+	 *
+	 * @return the guv
+	 */
+	public final String getGuv() {
 		return guv.getValue();
 	}
 	
-	public long getOrderId() {
+	/**
+	 * Gets the order id.
+	 *
+	 * @return the order id
+	 */
+	public final long getOrderId() {
 		return orderId;
 	}
 		
 	
-	public void setSelectCurrency(final String value) {
-		selectCurrency.setValue(value);;
+	/**
+	 * Sets the select currency.
+	 *
+	 * @param value the new select currency
+	 */
+	public final void setSelectCurrency(final String value) {
+		selectCurrency.setValue(value);
 	}
 
-	public void setOrderType(final String value) {
+	/**
+	 * Sets the order type.
+	 *
+	 * @param value the new order type
+	 */
+	public final void setOrderType(final String value) {
 		orderType.setValue(value);
 	}
 
-	public void setStrategy(final String value) {
-		strategy.setValue(value);;
+	/**
+	 * Sets the strategy.
+	 *
+	 * @param value the new strategy
+	 */
+	public final void setStrategy(final String value) {
+		strategy.setValue(value);
 	}
 
-	public void setOpenPrice(final String value) {
-		openPrice.setValue(value);;
+	/**
+	 * Sets the open price.
+	 *
+	 * @param value the new open price
+	 */
+	public final void setOpenPrice(final String value) {
+		openPrice.setValue(value);
 	}
 
-	public void setClosePrice(final String value) {
+	/**
+	 * Sets the close price.
+	 *
+	 * @param value the new close price
+	 */
+	public final void setClosePrice(final String value) {
 		closePrice.setValue(value);
 	}
 
-	public void setSl(final String value) {
-		sl.setValue(value);;
+	/**
+	 * Sets the sl.
+	 *
+	 * @param value the new sl
+	 */
+	public final void setSl(final String value) {
+		sl.setValue(value);
 	}
 
-	public void setTp(final String value) {
-		tp.setValue(value);;
+	/**
+	 * Sets the tp.
+	 *
+	 * @param value the new tp
+	 */
+	public final void setTp(final String value) {
+		tp.setValue(value);
 	}
 
-	public void setGuv(final String value) {
-		guv.setValue(value);;
+	/**
+	 * Sets the guv.
+	 *
+	 * @param value the new guv
+	 */
+	public final void setGuv(final String value) {
+		guv.setValue(value);
 	}
 
-	public void setOrderId(final long orderId) {
-		this.orderId = orderId;
+	/**
+	 * Sets the order id.
+	 *
+	 * @param value the new order id
+	 */
+	public final void setOrderId(final long value) {
+		this.orderId = value;
 	}
 
-	public void addClickListener(final ClickListener listener) {
+	/**
+	 * Adds the click listener (the presenter).
+	 *
+	 * @param listener the listener
+	 */
+	public final void addClickListener(final ClickListener listener) {
 		saveButton.addClickListener(listener);
 	}
 	
-	public void removeClickListener(final ClickListener listener) {
+	/**
+	 * Removes the click listener.
+	 *
+	 * @param listener the listener
+	 */
+	public final void removeClickListener(final ClickListener listener) {
 		saveButton.removeClickListener(listener);
 	}
 	

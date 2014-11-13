@@ -15,90 +15,118 @@ import com.flufflicks.marketjournal.spring.bo.OrderDataBo;
 import com.flufflicks.marketjournal.spring.bridge.SpringBoHelper;
 import com.flufflicks.marketjournal.spring.model.OrderData;
 
+/**
+ * The Class OrderStatsPresenter.
+ */
 public class OrderStatsPresenter implements Presenter {
-	
-	final DecimalFormat percentageFormat = new DecimalFormat("0.00");
 
+	/** The  format for decimal format in chart key. */
+	private final DecimalFormat percentageFormat = new DecimalFormat("0.00");
+
+	/** The view. */
 	private final OrderStatsView view;
 
+	/** The order data bussiness object. */
 	private final OrderDataBo orderDataBo = SpringBoHelper.getOrderDataBo();
 
-	public OrderStatsPresenter(final OrderStatsView view) {
-		this.view = view;
+	/**
+	 * Instantiates a new order stats presenter.
+	 *
+	 * @param orderStatsView the view
+	 */
+	public OrderStatsPresenter(final OrderStatsView orderStatsView) {
+		this.view = orderStatsView;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.portal.presenter.Presenter#bind()
+	 */
 	@Override
-	public void bind() {
+	public final void bind() {
 		view.setCaption("");
 		final List<OrderData> orders = orderDataBo.findAll();
 		final Locale currentLocale = VaadinPortalUtil.getCurrentLocale();
 		final ResourceBundle messages = ResourceBundle.getBundle("i18n", currentLocale);
-		
+
 		view.createPieChart(createOverviewDataset(orders), messages.getString("orderstats.chart.overview"));
 		view.createPieChart(createWinLossDataset(orders), messages.getString("orderstats.chart.guvstats"));
 	}
 
 	/**
-	 * Returns a dataset.
-	 * 
-	 * @return The dataset.
+	 * Returns the dataset for the overview chart.
+	 *
+	 * @param orders the order from datatabase
+	 * @return The result dataset.
 	 */
 	private DefaultPieDataset createOverviewDataset(final List<OrderData> orders) {
-		
+
 		final int count = orders.size();
-		final Map<String,Float> instrumentMap = getInstrumentMap(orders);
+		final Map<String, Float> instrumentMap = getInstrumentMap(orders);
 		final Object[] keys = instrumentMap.keySet().toArray();
 		final DefaultPieDataset dataset = new DefaultPieDataset();
 
 		for (final Object o : keys) {
-			final String key = (String)o;
-			final float percentage = instrumentMap.get(key)/count;
+			final String key = (String) o;
+			final float percentage = instrumentMap.get(key) / count;
 			dataset.setValue(key + "(" + percentageFormat.format(percentage) + ")", percentage);
-			
+
 		}
 		return dataset;
 	}
-	
+
 	/**
-	 * Returns a dataset.
-	 * 
+	 * Returns the dataset for the WIN/LOSS chart.
+	 *
+	 * @param orders the orders from database
 	 * @return The dataset.
 	 */
-	private DefaultPieDataset createWinLossDataset(final List<OrderData> orders) {		
+	private DefaultPieDataset createWinLossDataset(final List<OrderData> orders) {
 		float win = 0;
 		float loss = 0;
 		final int count = orders.size();
-		
+
 		for (final OrderData orderData : orders) {
 			if (orderData.getGuv() > 0) {
 				win++;
 			} else if (orderData.getGuv() < 0) {
 				loss++;
-			} 
+			}
 		}
 		final DefaultPieDataset dataset = new DefaultPieDataset();
-		final String winrate = percentageFormat.format(win/count);
-		percentageFormat.format(loss/count);
+		final String winrate = percentageFormat.format(win / count);
+		percentageFormat.format(loss / count);
 		dataset.setValue("Win (" + winrate + ")", win);
-		dataset.setValue("Loss (" + winrate + ")",loss);
+		dataset.setValue("Loss (" + winrate + ")", loss);
 
 		return dataset;
 
 	}
 
+	/**
+	 * Gets the instruments with the overall count.
+	 *
+	 * @param orders the orders from database
+	 * @return the instrument map
+	 */
 	private Map<String, Float> getInstrumentMap(final List<OrderData> orders) {
 		final Map<String, Float> map = new HashMap<String, Float>();
 		for (final OrderData orderData : orders) {
 			final String instrument = orderData.getInstrument();
-			final float f = map.get(instrument) != null ? map.get(instrument) : 0f;
-			final float f1 = f + 1f;
+			float f1 = 0f;
+			if (map.get(instrument) != null) {
+				final float f = map.get(instrument);
+				f1 = f + 1f;
+			}
 			map.put(instrument, f1);
 		}
 		return map;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.portal.presenter.Presenter#unbind()
+	 */
 	@Override
-	public void unbind() {
+	public final void unbind() {
 		this.view.removeTabs();
 	}
 
