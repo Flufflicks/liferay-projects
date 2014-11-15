@@ -10,43 +10,60 @@ import com.flufflicks.marketjournal.spring.bo.OrderDataBo;
 import com.flufflicks.marketjournal.spring.dao.OrderDataDAO;
 import com.flufflicks.marketjournal.spring.model.OrderData;
 
+/**
+ * The Class OrderDataBoImpl.
+ * Bussiness Object for OrderData loading and creation
+ */
 @Service("orderDataBo")
 public class OrderDataBoImpl implements OrderDataBo {
 	
+	/** The dao. */
 	@Autowired
-	OrderDataDAO dao;
+	private OrderDataDAO dao;
 	
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.spring.bo.OrderDataBo#saveOrUpdate(com.flufflicks.marketjournal.spring.model.OrderData)
+	 */
 	@Override
-	public void saveOrUpdate(final OrderData orderData) {
+	public final void saveOrUpdate(final OrderData orderData) {
 		final long companyId = VaadinPortalUtil.getCompanyId();
 		final long userId = VaadinPortalUtil.getUserId();
 		orderData.setCompanyId(companyId);
 		orderData.setUserId(userId);
 		
-		if (orderData.getId() != 0L){
+		if (orderData.getId() != 0L) {
 			dao.update(orderData);
-		} else{
+		} else {
 			dao.save(orderData);
 		}
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.spring.bo.OrderDataBo#delete(com.flufflicks.marketjournal.spring.model.OrderData)
+	 */
 	@Override
-	public void delete(final OrderData orderData) {
+	public final void delete(final OrderData orderData) {
 		dao.delete(orderData);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.spring.bo.OrderDataBo#findById(long)
+	 */
 	@Override
-	public OrderData findById(final long id) {
+	public final OrderData findById(final long id) {
 		return dao.findById(id);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.spring.bo.OrderDataBo#findAll()
+	 */
 	@Override
-	public List<OrderData> findAll() {
+	public final List<OrderData> findAll() {
 		final long companyId = VaadinPortalUtil.getCompanyId();
 		final long userId = VaadinPortalUtil.getUserId();
 	
-		return dao.findAllByCompanyIdAndUser(companyId,userId);
+		return dao.findAllByCompanyIdAndUser(companyId, userId);
 	}
 		
 }

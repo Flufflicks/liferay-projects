@@ -7,35 +7,53 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.flufflicks.marketjournal.spring.model.OrderData;
 
+/**
+ * The Class OrderDataDAOImpl.
+ */
 @Repository("orderDataDAO")
 public class OrderDataDAOImpl extends CustomHibernateDaoSupport implements OrderDataDAO {
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.spring.dao.OrderDataDAO#save(com.flufflicks.marketjournal.spring.model.OrderData)
+	 */
 	@Override
 	@Transactional(readOnly = false)
-	public void save(final OrderData order) {
+	public final void save(final OrderData order) {
 		getHibernateTemplate().save(order);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.spring.dao.OrderDataDAO#update(com.flufflicks.marketjournal.spring.model.OrderData)
+	 */
 	@Override
 	@Transactional(readOnly = false)
-	public void update(final OrderData orderData) {
+	public final void update(final OrderData orderData) {
 		getHibernateTemplate().update(orderData);
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.spring.dao.OrderDataDAO#delete(com.flufflicks.marketjournal.spring.model.OrderData)
+	 */
 	@Override
-	public void delete(final OrderData orderData) {
+	public final void delete(final OrderData orderData) {
 		getHibernateTemplate().delete(orderData);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.spring.dao.OrderDataDAO#findById(long)
+	 */
 	@Override
-	public OrderData findById(final long id) {
-		final List list = getHibernateTemplate().find("from OrderData where id=?", id);
+	public final OrderData findById(final long id) {
+		final List<?> list = getHibernateTemplate().find("from OrderData where id=?", id);
 		return (OrderData) list.get(0);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.spring.dao.OrderDataDAO#findAllByCompanyIdAndUser(long, long)
+	 */
 	@Override
-	public List<OrderData> findAllByCompanyIdAndUser(final long companyId, final long userId) {
+	public final List<OrderData> findAllByCompanyIdAndUser(final long companyId, final long userId) {
 		@SuppressWarnings("unchecked")
 		final List<OrderData> list = (List<OrderData>) getHibernateTemplate().find("from OrderData where companyId=? and userId=?", companyId, userId);
 
