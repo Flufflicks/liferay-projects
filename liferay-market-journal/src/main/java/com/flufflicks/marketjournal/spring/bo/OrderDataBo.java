@@ -37,5 +37,12 @@ public interface OrderDataBo {
 	 * @return the order data
 	 */
 	OrderData findById(long id);
+	
+	/**
+	 * Delete a order .
+	 *
+	 * @param id the id
+	 */
+	void deleteById(long id);
 
 }

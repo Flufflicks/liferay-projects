@@ -13,6 +13,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
@@ -28,6 +29,9 @@ public class OrderView extends VerticalLayout implements View {
 	
 	/** The Constant SAVE_BTN_ID to ident the button in clicklistener method. */
 	public static final String SAVE_BTN_ID = "OV_BTN_SAVE";
+	
+	/** The Constant SAVE_BTN_ID to ident the button in clicklistener method. */
+	public static final String DELETE_BTN_ID = "OV_BTN_DELTE";
 
 	/** The Constant textfield max length. */
 	private static final int TF_MAX_LENGTH = 10;
@@ -61,9 +65,15 @@ public class OrderView extends VerticalLayout implements View {
 
 	/** The guv textfield. */
 	private final TextField guv = new TextField();
+	
+	/** Button Layout *> */
+	private final HorizontalLayout buttonLayout = new HorizontalLayout();
 
 	/** The save button. */
 	private final Button saveButton = new Button();
+	
+	/** The delete button. */
+	private final Button deleteButton = new Button();
 
 	/**
 	 * Instantiates a new order view.
@@ -148,6 +158,10 @@ public class OrderView extends VerticalLayout implements View {
 		saveButton.setCaption(messages.getString("label.save"));
 		saveButton.setId(SAVE_BTN_ID);
 		
+//		deleteButton.setIcon(FontAwesome.ENVELOPE);
+		deleteButton.setCaption(messages.getString("label.delete"));
+		deleteButton.setId(DELETE_BTN_ID);
+		
 		mainLayout0.addComponent(selectCurrency);
 		mainLayout0.addComponent(orderType);
 		mainLayout0.addComponent(strategy);
@@ -156,8 +170,9 @@ public class OrderView extends VerticalLayout implements View {
 		mainLayout0.addComponent(sl);
 		mainLayout0.addComponent(tp);
 		mainLayout0.addComponent(guv);
-
-		mainLayout0.addComponent(saveButton);
+		mainLayout0.addComponent(buttonLayout);
+		buttonLayout.addComponent(saveButton);
+		buttonLayout.addComponent(deleteButton);
 	}
 
 	/**
@@ -427,6 +442,7 @@ public class OrderView extends VerticalLayout implements View {
 	 */
 	public final void addClickListener(final ClickListener listener) {
 		saveButton.addClickListener(listener);
+		deleteButton.addClickListener(listener);
 	}
 	
 	/**
@@ -436,6 +452,19 @@ public class OrderView extends VerticalLayout implements View {
 	 */
 	public final void removeClickListener(final ClickListener listener) {
 		saveButton.removeClickListener(listener);
+		deleteButton.removeClickListener(listener);
+	}
+
+	public void reset() {
+		this.orderId = 0L;
+		setStrategy(null);
+		setOrderType(null);
+		setOpenPrice(null);
+		setSelectCurrency(null);
+		setClosePrice(null);
+		setTp(null);
+		setSl(null);
+		setGuv(null);
 	}
 	
 }

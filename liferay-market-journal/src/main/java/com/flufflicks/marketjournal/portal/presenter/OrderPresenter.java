@@ -17,6 +17,7 @@ import com.vaadin.server.VaadinPortletService;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class OrderPresenter.
  */
@@ -87,7 +88,18 @@ public class OrderPresenter implements Presenter, ClickListener {
 		if (event.getButton().getId() == OrderView.SAVE_BTN_ID) {
 			liferayipc.sendEvent(IpcConstants.EVENT_RELOAD_ORDERS, null);
 			saveOrder();
+		} else if (event.getButton().getId() == OrderView.DELETE_BTN_ID) {
+			deleteOrder();
+			resetView();
+			liferayipc.sendEvent(IpcConstants.EVENT_RELOAD_ORDERS, null);
 		}
+	}
+
+	/**
+	 * Reset the view.
+	 */
+	private void resetView() {
+		this.view.reset();
 	}
 
 	/**
@@ -127,6 +139,14 @@ public class OrderPresenter implements Presenter, ClickListener {
 		if (fieldsValid && selectsValid) {
 			orderDataBo.saveOrUpdate(orderData);
 		}
+	}
+	
+	/**
+	 * Delete the order.
+	 */
+	private void deleteOrder() {
+		final long orderId = this.view.getOrderId();
+		orderDataBo.deleteById(orderId);
 	}
 
 	/**

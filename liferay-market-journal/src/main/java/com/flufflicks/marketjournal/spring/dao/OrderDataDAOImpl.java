@@ -36,6 +36,7 @@ public class OrderDataDAOImpl extends CustomHibernateDaoSupport implements Order
 	 * @see com.flufflicks.marketjournal.spring.dao.OrderDataDAO#delete(com.flufflicks.marketjournal.spring.model.OrderData)
 	 */
 	@Override
+	@Transactional(readOnly = false)
 	public final void delete(final OrderData orderData) {
 		getHibernateTemplate().delete(orderData);
 	}
@@ -45,8 +46,9 @@ public class OrderDataDAOImpl extends CustomHibernateDaoSupport implements Order
 	 */
 	@Override
 	public final OrderData findById(final long id) {
-		final List<?> list = getHibernateTemplate().find("from OrderData where id=?", id);
-		return (OrderData) list.get(0);
+//		final List<?> list = getHibernateTemplate().find("from OrderData where id=?", id);
+//		return (OrderData) list.get(0);
+		return getHibernateTemplate().get(OrderData.class, id);
 	}
 
 	/* (non-Javadoc)
@@ -58,5 +60,11 @@ public class OrderDataDAOImpl extends CustomHibernateDaoSupport implements Order
 		final List<OrderData> list = (List<OrderData>) getHibernateTemplate().find("from OrderData where companyId=? and userId=?", companyId, userId);
 
 		return list;
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void deleteById(final long id) {
+		getHibernateTemplate().delete(getHibernateTemplate().get(OrderData.class, id));
 	}
 }

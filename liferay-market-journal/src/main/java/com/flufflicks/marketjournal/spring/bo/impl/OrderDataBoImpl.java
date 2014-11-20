@@ -65,5 +65,13 @@ public class OrderDataBoImpl implements OrderDataBo {
 	
 		return dao.findAllByCompanyIdAndUser(companyId, userId);
 	}
+
+	/* (non-Javadoc)
+	 * @see com.flufflicks.marketjournal.spring.bo.OrderDataBo#deleteById(long)
+	 */
+	@Override
+	public void deleteById(final long id) {
+		dao.deleteById(id);
+	}
 		
 }

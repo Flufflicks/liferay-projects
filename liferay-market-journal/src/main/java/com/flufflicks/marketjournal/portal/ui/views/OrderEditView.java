@@ -30,6 +30,8 @@ public class OrderEditView extends VerticalLayout implements View {
 
 	/** The save button. */
 	private final Button saveButton = new Button();
+	
+
 
 	/* (non-Javadoc)
 	 * @see com.vaadin.navigator.View#enter(com.vaadin.navigator.ViewChangeListener.ViewChangeEvent)
@@ -47,7 +49,6 @@ public class OrderEditView extends VerticalLayout implements View {
 		final ResourceBundle messages = ResourceBundle.getBundle("i18n", currentLocale);
 
 		saveButton.setCaption(messages.getString("label.save"));
-
 		addComponent(mainLayout0);
 		mainLayout0.addComponent(positions);
 		mainLayout0.addComponent(strategies);

@@ -47,4 +47,11 @@ public interface OrderDataDAO {
 	 */
 	List<OrderData> findAllByCompanyIdAndUser(long companyId, long userId);
 	
+	/**
+	 * Delete by id.
+	 *
+	 * @param id the id
+	 */
+	void deleteById(long id);
+	
 }
