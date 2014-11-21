@@ -1,5 +1,7 @@
 package com.flufflicks.marketjournal.spring.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
 
 /**
  * The Entity Class OrderData.
@@ -16,9 +19,7 @@ import javax.persistence.UniqueConstraint;
 		@UniqueConstraint(columnNames = "ID") })
 public class OrderData implements java.io.Serializable  {
 
-	/**
-	 * 
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 7064455128888486147L;
 
 	/** The id. */
@@ -31,10 +32,13 @@ public class OrderData implements java.io.Serializable  {
 	@Column(name = "INSTRUMENT")
 	private String instrument;
 	
-	
 	/** The order type. */
 	@Column(name = "TYPE")
 	private String orderType;
+	
+	/** The open date. */
+	@Column(name = "openDate")
+	private Date openDate;
 	
 	/** The open price. */
 	@Column(name = "OPEN_RPICE")
@@ -54,7 +58,7 @@ public class OrderData implements java.io.Serializable  {
 	
 	/** The guv. */
 	@Column(name = "GUV")
-	private int guv;
+	private float guv;
 	
 	/** The strategy. */
 	@Column(name = "STRATEGY")
@@ -84,6 +88,24 @@ public class OrderData implements java.io.Serializable  {
 	 */
 	public final void setInstrument(final String value) {
 		this.instrument = value;
+	}
+
+	/**
+	 * Gets the open date.
+	 *
+	 * @return the open date
+	 */
+	public Date getOpenDate() {
+		return openDate;
+	}
+
+	/**
+	 * Sets the open date.
+	 *
+	 * @param openDate the new open date
+	 */
+	public void setOpenDate(final Date openDate) {
+		this.openDate = openDate;
 	}
 
 	/**
@@ -163,7 +185,7 @@ public class OrderData implements java.io.Serializable  {
 	 *
 	 * @return the guv
 	 */
-	public final int getGuv() {
+	public final float getGuv() {
 		return guv;
 	}
 
@@ -172,7 +194,7 @@ public class OrderData implements java.io.Serializable  {
 	 *
 	 * @param value the new guv
 	 */
-	public final void setGuv(final int value) {
+	public final void setGuv(final float value) {
 		this.guv = value;
 	}
 

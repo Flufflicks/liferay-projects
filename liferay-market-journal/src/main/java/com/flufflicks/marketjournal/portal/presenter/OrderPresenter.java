@@ -114,13 +114,14 @@ public class OrderPresenter implements Presenter, ClickListener {
 			final float closePrice = TextConverterUtil.getFloatValue(this.view.getClosePrice());
 			final int tp = TextConverterUtil.getIntValue(this.view.getTp());
 			final int sl = TextConverterUtil.getIntValue(this.view.getSl());
-			final int guv = TextConverterUtil.getIntValue(this.view.getGuv());
+			final float guv = TextConverterUtil.getFloatValue(this.view.getGuv());
 			//
 			orderData.setOpenPrice(openPrice);
 			orderData.setClosePrice(closePrice);
 			orderData.setTp(tp);
 			orderData.setSl(sl);
 			orderData.setGuv(guv);
+			orderData.setOpenDate(this.view.getOpenDate());
 		}
 		final boolean selectsValid = view.validateSelects();
 		if (selectsValid) {
@@ -138,6 +139,7 @@ public class OrderPresenter implements Presenter, ClickListener {
 
 		if (fieldsValid && selectsValid) {
 			orderDataBo.saveOrUpdate(orderData);
+			resetView();
 		}
 	}
 	
@@ -182,6 +184,7 @@ public class OrderPresenter implements Presenter, ClickListener {
 		this.view.setSelectCurrency(orderData.getInstrument());
 		this.view.setOrderType(orderData.getOrderType());
 		this.view.setStrategy(orderData.getStrategy());
+		this.view.setOpenDate(orderData.getOpenDate());
 		this.view.setOpenPrice(String.valueOf(orderData.getOpenPrice()));
 		this.view.setClosePrice(String.valueOf(orderData.getClosePrice()));
 		this.view.setSl(String.valueOf(orderData.getSl()));

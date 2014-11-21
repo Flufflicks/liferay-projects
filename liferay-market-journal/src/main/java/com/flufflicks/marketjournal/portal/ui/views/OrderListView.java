@@ -31,7 +31,7 @@ public class OrderListView extends VerticalLayout implements View {
 	 * Setup the view and add the orderTable.
 	 */
 	private void setupView() {
-		setupLayout();
+		setupLayout();	
 		mainLayout.addComponent(orderTable);
 	}
 

@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 import com.flufflicks.marketjournal.portal.ui.views.OrderStatsView;
@@ -20,7 +21,7 @@ import com.flufflicks.marketjournal.spring.model.OrderData;
  */
 public class OrderStatsPresenter implements Presenter {
 
-	/** The  format for decimal format in chart key. */
+	/** The format for decimal format in chart key. */
 	private final DecimalFormat percentageFormat = new DecimalFormat("0.00");
 
 	/** The view. */
@@ -32,13 +33,16 @@ public class OrderStatsPresenter implements Presenter {
 	/**
 	 * Instantiates a new order stats presenter.
 	 *
-	 * @param orderStatsView the view
+	 * @param orderStatsView
+	 *            the view
 	 */
 	public OrderStatsPresenter(final OrderStatsView orderStatsView) {
 		this.view = orderStatsView;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.flufflicks.marketjournal.portal.presenter.Presenter#bind()
 	 */
 	@Override
@@ -50,12 +54,15 @@ public class OrderStatsPresenter implements Presenter {
 
 		view.createPieChart(createOverviewDataset(orders), messages.getString("orderstats.chart.overview"));
 		view.createPieChart(createWinLossDataset(orders), messages.getString("orderstats.chart.guvstats"));
+		view.createLineChart(createCapitalDataset(orders), messages.getString("orderstats.chart.capital"));
+
 	}
 
 	/**
 	 * Returns the dataset for the overview chart.
 	 *
-	 * @param orders the order from datatabase
+	 * @param orders
+	 *            the order from datatabase
 	 * @return The result dataset.
 	 */
 	private DefaultPieDataset createOverviewDataset(final List<OrderData> orders) {
@@ -77,7 +84,8 @@ public class OrderStatsPresenter implements Presenter {
 	/**
 	 * Returns the dataset for the WIN/LOSS chart.
 	 *
-	 * @param orders the orders from database
+	 * @param orders
+	 *            the orders from database
 	 * @return The dataset.
 	 */
 	private DefaultPieDataset createWinLossDataset(final List<OrderData> orders) {
@@ -99,13 +107,33 @@ public class OrderStatsPresenter implements Presenter {
 		dataset.setValue("Loss (" + winrate + ")", loss);
 
 		return dataset;
+	}
 
+	/**
+	 * Returns the dataset for the capital chart.
+	 *
+	 * @param orders
+	 *            the orders from database
+	 * @return The dataset.
+	 */
+	private DefaultCategoryDataset createCapitalDataset(final List<OrderData> orders) {
+		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		float guv = 0.0f;
+		
+		for (int i = 0; i < orders.size(); i++) {
+			final OrderData order = orders.get(i);
+			guv+=order.getGuv();
+			dataset.addValue(guv, "orders", String.valueOf(i));
+		}
+		return dataset;
 	}
 
 	/**
 	 * Gets the instruments with the overall count.
 	 *
-	 * @param orders the orders from database
+	 * @param orders
+	 *            the orders from database
 	 * @return the instrument map
 	 */
 	private Map<String, Float> getInstrumentMap(final List<OrderData> orders) {
@@ -122,7 +150,9 @@ public class OrderStatsPresenter implements Presenter {
 		return map;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.flufflicks.marketjournal.portal.presenter.Presenter#unbind()
 	 */
 	@Override

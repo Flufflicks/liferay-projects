@@ -1,5 +1,6 @@
 package com.flufflicks.marketjournal.portal.presenter;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -28,6 +29,12 @@ public class OrderListPresenter implements Presenter {
 
 	/** The liferayipc component for Inter-Portlet-Communication. */
 	private final LiferayIPC liferayipc = new LiferayIPC();
+	
+	/** The Constant POSITION. */
+	static final String OPENDATE = "orderlist.opendate";
+	
+	/** The Constant POSITION. */
+	static final String INSTRUMENT = "orderlist.instrument";
 
 	/** The Constant ORDER_TYPE. */
 	static final String ORDER_TYPE = "orderlist.ordertype";
@@ -74,11 +81,13 @@ public class OrderListPresenter implements Presenter {
 	 */
 	private void setupIndexContainer() {
 		final IndexedContainer ic = new IndexedContainer();
+		ic.addContainerProperty(OPENDATE, Date.class, "");
+		ic.addContainerProperty(INSTRUMENT, String.class, "");
 		ic.addContainerProperty(ORDER_TYPE, String.class, "");
 		ic.addContainerProperty(STRATEGY, String.class, "");
 		ic.addContainerProperty(OPEN_PRICE, Float.class, "");
 		ic.addContainerProperty(CLOSE_PRICE, Float.class, "");
-		ic.addContainerProperty(GUV, Integer.class, "");
+		ic.addContainerProperty(GUV, Float.class, "");
 		loadData(ic);
 		view.getOrderTable().setContainerDataSource(ic);
 
@@ -96,6 +105,8 @@ public class OrderListPresenter implements Presenter {
 		final List<OrderData> orderList = orderDataBo.findAll();
 		for (final OrderData orderData : orderList) {
 			ic.addItem(orderData.getId());
+			ic.getContainerProperty(orderData.getId(), OPENDATE).setValue(orderData.getOpenDate());
+			ic.getContainerProperty(orderData.getId(), INSTRUMENT).setValue(orderData.getInstrument());
 			ic.getContainerProperty(orderData.getId(), ORDER_TYPE).setValue(orderData.getOrderType());
 			ic.getContainerProperty(orderData.getId(), STRATEGY).setValue(orderData.getStrategy());
 			ic.getContainerProperty(orderData.getId(), OPEN_PRICE).setValue(orderData.getOpenPrice());
@@ -111,8 +122,12 @@ public class OrderListPresenter implements Presenter {
 		final Locale currentLocale = VaadinPortalUtil.getCurrentLocale();
 		final ResourceBundle messages = ResourceBundle.getBundle("i18n", currentLocale);
 		
-		view.getOrderTable().setVisibleColumns(new Object[] { ORDER_TYPE, STRATEGY, OPEN_PRICE, CLOSE_PRICE, GUV });
-		view.getOrderTable().setSelectable(true);		
+
+		
+		view.getOrderTable().setVisibleColumns(new Object[] {OPENDATE, INSTRUMENT, ORDER_TYPE, STRATEGY, OPEN_PRICE, CLOSE_PRICE, GUV });
+		view.getOrderTable().setSelectable(true);
+		view.getOrderTable().setColumnHeader(OPENDATE, messages.getString(OPENDATE));
+		view.getOrderTable().setColumnHeader(INSTRUMENT, messages.getString(INSTRUMENT));
 		view.getOrderTable().setColumnHeader(ORDER_TYPE, messages.getString(ORDER_TYPE));
 		view.getOrderTable().setColumnHeader(STRATEGY, messages.getString(STRATEGY));
 		view.getOrderTable().setColumnHeader(OPEN_PRICE, messages.getString(OPEN_PRICE));
@@ -121,6 +136,13 @@ public class OrderListPresenter implements Presenter {
 
 		view.getOrderTable().setImmediate(true);
 
+		view.getOrderTable().setConverter(OPENDATE, new com.vaadin.data.util.converter.StringToDateConverter(){
+			@Override
+			public java.text.DateFormat getFormat(final Locale locale){
+			return new java.text.SimpleDateFormat("dd.MM.YYYY HH:mm");
+			}
+			});
+		
 		view.getOrderTable().addValueChangeListener(new Property.ValueChangeListener() {
 			/**
 			 * 

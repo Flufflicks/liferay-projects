@@ -1,7 +1,9 @@
 package com.flufflicks.marketjournal.portal.ui.views;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 import com.flufflicks.marketjournal.portal.util.VaadinPortalUtil;
 import com.flufflicks.marketjournal.portal.validator.FloatValidator;
@@ -11,11 +13,13 @@ import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.UserError;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -50,6 +54,9 @@ public class OrderView extends VerticalLayout implements View {
 	
 	/** The  select field for the strategy. */
 	private final NativeSelect strategy = new NativeSelect();
+	
+	/**  The openDate Popup Field. */
+	private final PopupDateField openDate = new PopupDateField();
 
 	/** The open price textfield. */
 	private final TextField openPrice = new TextField();
@@ -66,7 +73,7 @@ public class OrderView extends VerticalLayout implements View {
 	/** The guv textfield. */
 	private final TextField guv = new TextField();
 	
-	/** Button Layout *> */
+	/**  Button Layout *>. */
 	private final HorizontalLayout buttonLayout = new HorizontalLayout();
 
 	/** The save button. */
@@ -113,7 +120,13 @@ public class OrderView extends VerticalLayout implements View {
 		strategy.setCaption(messages.getString("orderview.strategy.description"));
 		strategy.setRequiredError(messages.getString("orderview.strategy.error"));
 		strategy.setImmediate(true);
-
+		
+		openDate.setValue(new Date());
+		openDate.setCaption(messages.getString("orderview.opendate.description"));
+		openDate.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
+		openDate.setLocale(Locale.GERMAN);
+		openDate.setResolution(Resolution.MINUTE);
+		
 		openPrice.setImmediate(true);
 		openPrice.setInputPrompt(messages.getString("label.placeholder"));
 		openPrice.addValidator(new FloatValidator());
@@ -150,7 +163,7 @@ public class OrderView extends VerticalLayout implements View {
 
 		guv.setImmediate(true);
 		guv.setInputPrompt(messages.getString("label.placeholder"));
-		guv.addValidator(new IntValidator());
+		guv.addValidator(new FloatValidator());
 		guv.setValidationVisible(true);
 		guv.setCaption(messages.getString("orderview.guv.description"));
 		guv.setMaxLength(TF_MAX_LENGTH);
@@ -165,6 +178,7 @@ public class OrderView extends VerticalLayout implements View {
 		mainLayout0.addComponent(selectCurrency);
 		mainLayout0.addComponent(orderType);
 		mainLayout0.addComponent(strategy);
+		mainLayout0.addComponent(openDate);
 		mainLayout0.addComponent(openPrice);
 		mainLayout0.addComponent(closePrice);
 		mainLayout0.addComponent(sl);
@@ -298,6 +312,15 @@ public class OrderView extends VerticalLayout implements View {
 	public final String getStrategy() {
 		return (String) strategy.getValue();
 	}
+	
+	/**
+	 * Gets the open date.
+	 *
+	 * @return the open date
+	 */
+	public final Date getOpenDate(){
+		return openDate.getValue();
+	}
 
 	/**
 	 * Gets the open price.
@@ -380,6 +403,15 @@ public class OrderView extends VerticalLayout implements View {
 	public final void setStrategy(final String value) {
 		strategy.setValue(value);
 	}
+	
+	/**
+	 * Sets the open date.
+	 *
+	 * @param value the new open date
+	 */
+	public final void setOpenDate(final Date value) {
+		openDate.setValue(value);
+	}
 
 	/**
 	 * Sets the open price.
@@ -455,10 +487,14 @@ public class OrderView extends VerticalLayout implements View {
 		deleteButton.removeClickListener(listener);
 	}
 
+	/**
+	 * Reset.
+	 */
 	public void reset() {
 		this.orderId = 0L;
 		setStrategy(null);
 		setOrderType(null);
+		setOpenDate(new Date());
 		setOpenPrice(null);
 		setSelectCurrency(null);
 		setClosePrice(null);

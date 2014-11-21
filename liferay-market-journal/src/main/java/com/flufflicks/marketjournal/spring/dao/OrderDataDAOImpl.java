@@ -57,7 +57,7 @@ public class OrderDataDAOImpl extends CustomHibernateDaoSupport implements Order
 	@Override
 	public final List<OrderData> findAllByCompanyIdAndUser(final long companyId, final long userId) {
 		@SuppressWarnings("unchecked")
-		final List<OrderData> list = (List<OrderData>) getHibernateTemplate().find("from OrderData where companyId=? and userId=?", companyId, userId);
+		final List<OrderData> list = (List<OrderData>) getHibernateTemplate().find("from OrderData where companyId=? and userId= ? order by openDate", companyId, userId);
 
 		return list;
 	}
