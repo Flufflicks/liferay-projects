@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The Entity Class OrderData.
  */
@@ -37,8 +38,12 @@ public class OrderData implements java.io.Serializable  {
 	private String orderType;
 	
 	/** The open date. */
-	@Column(name = "openDate")
+	@Column(name = "OPEN_DATE")
 	private Date openDate;
+
+	/** The close date. */
+	@Column(name = "CLOSE_DATE")
+	private Date closeDate;
 	
 	/** The open price. */
 	@Column(name = "OPEN_RPICE")
@@ -56,9 +61,21 @@ public class OrderData implements java.io.Serializable  {
 	@Column(name = "SL")
 	private int sl;
 	
+	/**  The volume. */
+	@Column(name ="VOLUME")
+	private float volume;
+	
+	/**  The swap. */
+	@Column(name ="SWAP")
+	private float swap;
+	
 	/** The guv. */
 	@Column(name = "GUV")
 	private float guv;
+	
+	/**  The description of the trade. */
+	@Column(name = "COMMENT")
+	private String comment;
 	
 	/** The strategy. */
 	@Column(name = "STRATEGY")
@@ -250,6 +267,88 @@ public class OrderData implements java.io.Serializable  {
 	 */
 	public final void setOrderType(final String type) {
 		this.orderType = type;
+	}
+
+	/**
+	 * Gets the close date.
+	 *
+	 * @return the close date
+	 */
+	public Date getCloseDate() {
+		return closeDate;
+	}
+
+	/**
+	 * Sets the close date.
+	 *
+	 * @param closeDate the new close date
+	 */
+	public void setCloseDate(final Date closeDate) {
+		this.closeDate = closeDate;
+	}
+
+	/**
+	 * Gets the volume.
+	 *
+	 * @return the volume
+	 */
+	public float getVolume() {
+		return volume;
+	}
+
+	/**
+	 * Sets the volume.
+	 *
+	 * @param volume the new volume
+	 */
+	public void setVolume(final float volume) {
+		this.volume = volume;
+	}
+
+	/**
+	 * Gets the swap.
+	 *
+	 * @return the swap
+	 */
+	public float getSwap() {
+		return swap;
+	}
+
+	/**
+	 * Sets the swap.
+	 *
+	 * @param swap the new swap
+	 */
+	public void setSwap(final float swap) {
+		this.swap = swap;
+	}
+
+	
+	/**
+	 * Gets the comment.
+	 *
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
+	}
+
+	/**
+	 * Sets the comment.
+	 *
+	 * @param comment the new comment
+	 */
+	public void setComment(final String comment) {
+		this.comment = comment;
+	}
+
+	/**
+	 * Gets the serialversionuid.
+	 *
+	 * @return the serialversionuid
+	 */
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	/**

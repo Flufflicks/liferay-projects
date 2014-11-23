@@ -9,8 +9,8 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import com.flufflicks.marketjournal.portal.presenter.OrderStatsPresenter;
-import com.flufflicks.marketjournal.portal.ui.views.OrderStatsView;
+import com.flufflicks.marketjournal.portal.presenter.OrderChartsPresenter;
+import com.flufflicks.marketjournal.portal.ui.views.OrderChartsView;
 import com.vaadin.server.VaadinPortletSession;
 import com.vaadin.server.VaadinPortletSession.PortletListener;
 import com.vaadin.server.VaadinRequest;
@@ -22,16 +22,16 @@ import com.vaadin.ui.UI;
  * The Class OrderStatsControllerUI.
  */
 @SuppressWarnings("deprecation")
-public class OrderStatsControllerUI extends UI implements PortletListener {
+public class OrderChartsControllerUI extends UI implements PortletListener {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -5762607317060662432L;
 
 	/** The view. */
-	private final OrderStatsView view = new OrderStatsView();
+	private final OrderChartsView view = new OrderChartsView();
 
 	/** The presenter. */
-	private OrderStatsPresenter presenter;
+	private OrderChartsPresenter presenter;
 
 	/*
 	 * (non-Javadoc)
@@ -46,7 +46,7 @@ public class OrderStatsControllerUI extends UI implements PortletListener {
 
 		layout.addComponent(view);
 
-		presenter = new OrderStatsPresenter(view);
+		presenter = new OrderChartsPresenter(view);
 		presenter.bind();
 
 		final VaadinPortletSession portletsession = (VaadinPortletSession) VaadinSession.getCurrent();
@@ -66,8 +66,8 @@ public class OrderStatsControllerUI extends UI implements PortletListener {
 	 */
 	@Override
 	public final void handleRenderRequest(final RenderRequest request, final RenderResponse response, final UI uI) {
-		presenter.unbind();
-		presenter.bind();
+//		presenter.unbind();
+//		presenter.bind();
 	}
 
 	/*
